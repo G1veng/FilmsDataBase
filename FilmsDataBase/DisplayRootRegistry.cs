@@ -7,7 +7,7 @@ namespace FilmsDataBase
 {
   public class DisplayRootRegistry
   {
-    Dictionary<Type, Type> vmToWindowMapping = new Dictionary<Type, Type>();
+    private Dictionary<Type, Type> vmToWindowMapping = new Dictionary<Type, Type>();
 
     public void RegisterWindowType<VM, Win>() where Win : Window, new() where VM : class
     {
@@ -18,6 +18,12 @@ namespace FilmsDataBase
         throw new InvalidOperationException(
             $"Type {vmType.FullName} is already registered");
       vmToWindowMapping[vmType] = typeof(Win);
+    }
+    public bool CheckForExistingWindows(object vm)
+    {
+      if (vm == null) return false;
+      if (openWindows.ContainsKey(vm)) return true;
+      return false;
     }
 
     public void UnregisterWindowType<VM>()
@@ -49,7 +55,7 @@ namespace FilmsDataBase
       window.DataContext = vm;
       return window;
     }
-    Dictionary<object, Window> openWindows = new Dictionary<object, Window>();
+    private Dictionary<object, Window> openWindows = new Dictionary<object, Window>();
     public void ShowPresentation(object vm)
     {
       if (vm == null)
@@ -69,7 +75,6 @@ namespace FilmsDataBase
       window.Close();
       openWindows.Remove(vm);
     }
-
     public async Task ShowModalPresentation(object vm)
     {
       var window = CreateWindowInstanceWithVM(vm);

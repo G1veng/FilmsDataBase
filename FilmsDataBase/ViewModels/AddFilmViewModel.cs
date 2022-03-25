@@ -2,22 +2,23 @@
 using System.Windows.Input;
 using FilmsDataBase.Infrastructure.Commands;
 using System.Windows;
-using System.Collections.Generic;
-using FilmsDataBase.Models;
-using System;
-using FilmsDataBase.ViewModels.Base;
 
 namespace FilmsDataBase.ViewModels
 {
   
   internal class AddFilmViewModel : ViewModel
   {
+    private DisplayRootRegistry _displayRootRegistry;
+    public DisplayRootRegistry DisplayRootRegistry
+    {
+      set { _displayRootRegistry = value; }
+      get { return _displayRootRegistry; }
+    }
     #region CloseApplicationCommand
     public ICommand CloseApplicationCommand { get; }
     private void OnCloseApplicationCommandExecuted(object p)
     {
-      if (p is Window window)
-        window.Close();
+      DisplayRootRegistry.HidePresentation(this);
     }
     private bool CanCloseApplicationCommandExecute(object p) => true;
     #endregion

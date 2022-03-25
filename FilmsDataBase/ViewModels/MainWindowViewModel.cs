@@ -4,26 +4,29 @@ using FilmsDataBase.Infrastructure.Commands;
 using System.Windows;
 using System.Collections.Generic;
 using FilmsDataBase.Models;
-using System;
+using FilmsDataBase;
 
 namespace FilmsDataBase.ViewModels
 {
   internal class MainWindowViewModel : ViewModel
   {
     #region SelectedWindow
-    
+    private DisplayRootRegistry displayRootRegistry;
+    private AddFilmViewModel addFilmViewModel;
     #endregion
-    
     public List<Film> Films { get;}
+    public bool isOpened { get; set; }
     #region Commands
 
     #region 
     public ICommand OpenInnerWindowCommand { get; }
-    private bool CanOpenInnerWindowCommandExecute(object p) => true;
+    private bool CanOpenInnerWindowCommandExecute(object p) => !displayRootRegistry.CheckForExistingWindows(addFilmViewModel);
+    //private bool CanOpenInnerWindowCommandExecute(object p) => App.
     private void OnOpenInnerWindowCommandExecuted(object p)
     {
-      var displayRootRegistry = (Application.Current as App).displayRootRegistry;
-      var addFilmViewModel = new AddFilmViewModel();
+      
+      addFilmViewModel = new AddFilmViewModel();
+      addFilmViewModel.DisplayRootRegistry = displayRootRegistry;
       displayRootRegistry.ShowPresentation(addFilmViewModel);
     }
     #endregion
@@ -40,6 +43,7 @@ namespace FilmsDataBase.ViewModels
     #endregion
     public MainWindowViewModel()
     {
+      displayRootRegistry = (Application.Current as App).displayRootRegistry;
       Films = new List<Film>() 
       { new Film{
           Title = "Человек-паук: Нет пути домой",
@@ -53,8 +57,6 @@ namespace FilmsDataBase.ViewModels
       CloseApplicationCommand = new LambdaCommand(OnCloseApplicationCommandExecuted, CanCloseApplicationCommandExecute);
       OpenInnerWindowCommand = new LambdaCommand(OnOpenInnerWindowCommandExecuted, CanOpenInnerWindowCommandExecute);
       #endregion
-
-
     }
   }
 }
