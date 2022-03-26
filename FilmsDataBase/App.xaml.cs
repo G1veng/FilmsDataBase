@@ -8,6 +8,7 @@ using System.Windows;
 using FilmsDataBase.ViewModels;
 using FilmsDataBase.Views.Windows;
 using FilmsDataBase;
+using FilmsDataBase.Data;
 
 
 namespace FilmsDataBase
@@ -23,6 +24,7 @@ namespace FilmsDataBase
     public App()
     {
       displayRootRegistry.RegisterWindowType<AddFilmViewModel, AddFilmWindow>();
+      BaseOfFilms baseOfFilms = new BaseOfFilms();
     }
   }
 }

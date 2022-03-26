@@ -1,5 +1,5 @@
-﻿using System.Windows;
-using FilmsDataBase.Views.Windows;
+﻿using System.ComponentModel;
+using System.Windows;
 
 namespace FilmsDataBase
 {
@@ -10,6 +10,8 @@ namespace FilmsDataBase
   {
     public MainWindow()
     {
+      /*if (DesignerProperties.GetIsInDesignMode(new DependencyObject()))
+        return;*/
       InitializeComponent();
     }
   }

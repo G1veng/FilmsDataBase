@@ -18,13 +18,11 @@ namespace FilmsDataBase.ViewModels
     public bool isOpened { get; set; }
     #region Commands
 
-    #region 
+    #region OpenInnerWindowComman 
     public ICommand OpenInnerWindowCommand { get; }
     private bool CanOpenInnerWindowCommandExecute(object p) => !displayRootRegistry.CheckForExistingWindows(addFilmViewModel);
-    //private bool CanOpenInnerWindowCommandExecute(object p) => App.
     private void OnOpenInnerWindowCommandExecuted(object p)
     {
-      
       addFilmViewModel = new AddFilmViewModel();
       addFilmViewModel.DisplayRootRegistry = displayRootRegistry;
       displayRootRegistry.ShowPresentation(addFilmViewModel);
@@ -40,6 +38,8 @@ namespace FilmsDataBase.ViewModels
     }
     private bool CanCloseApplicationCommandExecute(object p) => true;
     #endregion
+
+
     #endregion
     public MainWindowViewModel()
     {
