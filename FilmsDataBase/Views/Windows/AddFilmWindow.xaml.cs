@@ -19,9 +19,21 @@ namespace FilmsDataBase.Views.Windows
   /// </summary>
   public partial class AddFilmWindow : Window
   {
+    private bool isPlaying =  false;
     public AddFilmWindow()
     {
       InitializeComponent();
+      Video.Play();
+      Video.Stop();
+    }
+
+    private void MediaElement_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    {
+      if (isPlaying)
+        Video.Pause();
+      if (!isPlaying)
+        Video.Play();
+      isPlaying = isPlaying == false ? true : false;
     }
   }
 }

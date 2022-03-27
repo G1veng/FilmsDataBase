@@ -20,6 +20,8 @@ namespace FilmsDataBase.ViewModels
         (MessageBoxResult)MessageBoxDefaultButton.Button1,
         System.Windows.MessageBoxOptions.DefaultDesktopOnly);
     }
+    private MessageBoxResult Alarm(string message, string caption, MessageBoxButton button, MessageBoxImage icon) =>
+      System.Windows.MessageBox.Show(message, caption, button, icon);
 
     #region Properties
     private DisplayRootRegistry _displayRootRegistry;
@@ -54,7 +56,8 @@ namespace FilmsDataBase.ViewModels
     public ICommand CloseApplicationCommand { get; }
     private void OnCloseApplicationCommandExecuted(object p)
     {
-      DisplayRootRegistry.HidePresentation(this);
+      if (Alarm("Are you sure you want to close window?", "Word Processor", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+        DisplayRootRegistry.HidePresentation(this);
     }
     private bool CanCloseApplicationCommandExecute(object p) => true;
     #endregion
@@ -76,7 +79,7 @@ namespace FilmsDataBase.ViewModels
       if (Description == string.Empty || Description == null) return false;
       if (Icon == string.Empty || Icon == null) return false;
       if (Trailer == string.Empty || Trailer == null) return false;
-      if (!int.TryParse(Year, out int year) || year <= 1800) return false;
+      if (!int.TryParse(Year, out int year) || year < 1908) return false;
       IntYear = year;
       return true;
     }

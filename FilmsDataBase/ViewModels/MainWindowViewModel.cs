@@ -24,10 +24,6 @@ namespace FilmsDataBase.ViewModels
         (MessageBoxResult)MessageBoxDefaultButton.Button1,
         System.Windows.MessageBoxOptions.DefaultDesktopOnly);
     }
-    private MessageBoxResult Alarm(string message, string caption, MessageBoxButton button, MessageBoxImage icon)
-    {
-      return System.Windows.MessageBox.Show(message, caption, button, icon);
-    }
 
     #region SelectedWindow
     private DisplayRootRegistry displayRootRegistry;
@@ -54,7 +50,8 @@ namespace FilmsDataBase.ViewModels
 
     #region InformationAboutFilmCommand
     public ICommand InformationAboutFilmCommand { get; }
-    private bool CanInformationAboutFilmCommandExecute(object p) => WhichFilm != null && !functionality.IsEmpty();
+    private bool CanInformationAboutFilmCommandExecute(object p) => WhichFilm != null && !functionality.IsEmpty() &&
+      !displayRootRegistry.CheckForExistingWindows(informationAboutFilmWindowViewModel);
     private void OnInformationAboutFilmCommandExecuted(object p)
     {
       if (informationAboutFilmWindowViewModel == null)
@@ -91,7 +88,8 @@ namespace FilmsDataBase.ViewModels
 
     #region EditFilmCommand
     public ICommand EditFilmCommand { get; }
-    private bool CanEditFilmCommandExecute(object p) => WhichFilm != null && !functionality.IsEmpty();
+    private bool CanEditFilmCommandExecute(object p) => WhichFilm != null && !functionality.IsEmpty() &&
+      !displayRootRegistry.CheckForExistingWindows(addFilmViewModel);
     private void OnEditFilmCommandExecuted(object p)
     {
       if(addFilmViewModel == null)
@@ -112,10 +110,10 @@ namespace FilmsDataBase.ViewModels
     public ICommand CloseApplicationCommand { get;}
     private void OnCloseApplicationCommandExecuted(object p)
     {
-      if (Alarm("Are you sure you want to close window?", "Word Processor", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
-        System.Windows.Application.Current.Shutdown();
+      System.Windows.Application.Current.Shutdown();
     }
-    private bool CanCloseApplicationCommandExecute(object p) => true;
+    private bool CanCloseApplicationCommandExecute(object p) => !displayRootRegistry.CheckForExistingWindows(addFilmViewModel) &&
+      !displayRootRegistry.CheckForExistingWindows(informationAboutFilmWindowViewModel);
     #endregion
 
     #region RefreshDataBaseCommand
