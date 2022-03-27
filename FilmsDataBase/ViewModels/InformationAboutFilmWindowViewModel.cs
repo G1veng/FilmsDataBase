@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using FilmsDataBase.ViewModels.Base;
 using FilmsDataBase.Infrastructure.Commands;
@@ -53,7 +49,9 @@ namespace FilmsDataBase.ViewModels
 
     public InformationAboutFilmWindowViewModel()
     {
+      #region Commands
       CloseApplicationCommand = new LambdaCommand(OnCloseApplicationCommandExecuted, CanCloseApplicationCommandExecute);
+      #endregion
     }
   }
 }

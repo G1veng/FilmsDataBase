@@ -4,7 +4,6 @@ using FilmsDataBase.Infrastructure.Commands;
 using FilmsDataBase.Services;
 using System.Windows;
 using System.Windows.Forms;
-using FilmsDataBase.Models;
 
 namespace FilmsDataBase.ViewModels
 {
@@ -125,7 +124,6 @@ namespace FilmsDataBase.ViewModels
 
     public AddFilmViewModel()
     {
-
       #region Commands
       CloseApplicationCommand = new LambdaCommand(OnCloseApplicationCommandExecuted, CanCloseApplicationCommandExecute);
       SaveDataCommand = new LambdaCommand(OnSaveDataCommandExecuted, CanSaveDataCommandExecute);

@@ -28,7 +28,7 @@
         <TextBlock Text = "{Binding Year}" Margin="0, 100, 0, 0" HorizontalAlignment="Center" Grid.Row="0"/>
         <TextBlock Text = "{Binding Description}" TextWrapping="Wrap" Grid.Column="1" Grid.Row="0" Margin="10, 20, 10, 10" HorizontalAlignment="Center" TextAlignment="Justify"/>
         <Image Source = "{Binding Icon}" Margin="10" Grid.Column="3" Grid.RowSpan="3"/>
-        <MediaElement Source = "{Binding Trailer}" Grid.Row="1" Grid.ColumnSpan="2" LoadedBehavior="Play" Margin="0, 0, 0, 25" Grid.RowSpan="2"/>
+        <MediaElement x:Name="Video" Source = "{Binding Trailer}" Grid.Row="1" Grid.ColumnSpan="2" LoadedBehavior="Manual" Margin="0, 0, 0, 25" Grid.RowSpan="2" MouseLeftButtonDown="Video_MouseLeftButtonDown"/>
         
     </Grid>
 </Window>
