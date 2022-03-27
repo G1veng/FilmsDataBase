@@ -32,6 +32,7 @@ namespace FilmsDataBase.ViewModels
     #region SelectedWindow
     private DisplayRootRegistry displayRootRegistry;
     private AddFilmViewModel addFilmViewModel;
+    private InformationAboutFilmWindowViewModel informationAboutFilmWindowViewModel;
     private Functionality functionality;
     #endregion
 
@@ -51,6 +52,24 @@ namespace FilmsDataBase.ViewModels
 
     #region Commands
 
+    #region InformationAboutFilmCommand
+    public ICommand InformationAboutFilmCommand { get; }
+    private bool CanInformationAboutFilmCommandExecute(object p) => WhichFilm != null && !functionality.IsEmpty();
+    private void OnInformationAboutFilmCommandExecuted(object p)
+    {
+      if (informationAboutFilmWindowViewModel == null)
+        informationAboutFilmWindowViewModel = new InformationAboutFilmWindowViewModel();
+      informationAboutFilmWindowViewModel.Title = WhichFilm.Title;
+      informationAboutFilmWindowViewModel.Description = WhichFilm.Description;
+      informationAboutFilmWindowViewModel.Icon = WhichFilm.Icon;
+      informationAboutFilmWindowViewModel.Trailer = WhichFilm.Trailer;
+      informationAboutFilmWindowViewModel.Year = WhichFilm.Year.ToString();
+      informationAboutFilmWindowViewModel.IntYear = WhichFilm.Year;
+      informationAboutFilmWindowViewModel.DisplayRootRegistry = displayRootRegistry;
+      displayRootRegistry.ShowPresentation(informationAboutFilmWindowViewModel);
+    }
+    #endregion
+
     #region OpenInnerWindowComman 
     public ICommand OpenInnerWindowCommand { get; }
     private bool CanOpenInnerWindowCommandExecute(object p) => !displayRootRegistry.CheckForExistingWindows(addFilmViewModel);
@@ -58,6 +77,13 @@ namespace FilmsDataBase.ViewModels
     {
       if (addFilmViewModel == null)
         addFilmViewModel = new AddFilmViewModel();
+      addFilmViewModel.OldTitle = "";
+      addFilmViewModel.Title = "";
+      addFilmViewModel.Description = "";
+      addFilmViewModel.Icon = "";
+      addFilmViewModel.Trailer = "";
+      addFilmViewModel.Year = "";
+      addFilmViewModel.IntYear = new int();
       addFilmViewModel.DisplayRootRegistry = displayRootRegistry;
       displayRootRegistry.ShowPresentation(addFilmViewModel);
     }
@@ -138,6 +164,7 @@ namespace FilmsDataBase.ViewModels
       RefreshDataBaseCommand = new LambdaCommand(OnRefreshDataBaseCommandExecuted, CanRefreshDataBaseCommandExecute);
       DeleteDataFromDataBaseCommand = new LambdaCommand(OnDeleteDataFromDataBaseCommandExecuted, CanDeleteDataFromDataBaseCommandExecute);
       EditFilmCommand = new LambdaCommand(OnEditFilmCommandExecuted, CanEditFilmCommandExecute);
+      InformationAboutFilmCommand = new LambdaCommand(OnInformationAboutFilmCommandExecuted, CanInformationAboutFilmCommandExecute);
       #endregion
     }
   }

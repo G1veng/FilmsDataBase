@@ -22,6 +22,7 @@ namespace FilmsDataBase
     public App()
     {
       displayRootRegistry.RegisterWindowType<AddFilmViewModel, AddFilmWindow>();
+      displayRootRegistry.RegisterWindowType<InformationAboutFilmWindowViewModel, InformationAboutFilmWindow>();
     }
   }
 }

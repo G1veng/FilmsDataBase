@@ -18,6 +18,7 @@
         <KeyBinding Command="{Binding DeleteDataFromDataBaseCommand}" Gesture="Ctrl + Delete"/>
         <KeyBinding Command="{Binding CloseApplicationCommand}" Gesture="ESC"/>
         <KeyBinding Command="{Binding EditFilmCommand}" Gesture="Ctrl + E"/>
+        <KeyBinding Command="{Binding InformationAboutFilmCommand}" Gesture="Ctrl + I"/>
     </Window.InputBindings>
     <Grid>
         <Grid.Resources>
@@ -49,6 +50,7 @@
                 <MenuItem Header="Edit film" Command="{Binding EditFilmCommand}"/>
                 <MenuItem Header="Exit" Command="{Binding CloseApplicationCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
                 <MenuItem Header="Refresh" Command="{Binding RefreshDataBaseCommand}"/>
+                <MenuItem Header="Information about film" Command="{Binding InformationAboutFilmCommand}"/>
             </MenuItem>
         </Menu>
         <DataGrid ItemsSource="{Binding Films, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Grid.ColumnSpan="3" Grid.RowSpan="3" Margin="0, 20, 0, 0" AutoGenerateColumns="False"
