@@ -12,7 +12,26 @@
     <Window.DataContext>
         <vm:MainWindowViewModel/>
     </Window.DataContext>
+    <Window.InputBindings>
+        <KeyBinding Command="{Binding RefreshDataBaseCommand}" Gesture="F5"/>
+        <KeyBinding Command="{Binding OpenInnerWindowCommand}" Gesture="Ctrl + O"/>
+        <KeyBinding Command="{Binding DeleteDataFromDataBaseCommand}" Gesture="Ctrl + Delete"/>
+        <KeyBinding Command="{Binding CloseApplicationCommand}" Gesture="ESC"/>
+        <KeyBinding Command="{Binding EditFilmCommand}" Gesture="Ctrl + E"/>
+    </Window.InputBindings>
     <Grid>
+        <Grid.Resources>
+            <DataTemplate x:Key="Icon">
+                <StackPanel Width="80" Height="120">
+                    <Image Source="{Binding Icon}"/>
+                </StackPanel>
+            </DataTemplate>
+            <DataTemplate x:Key="Trailer">
+                <StackPanel Width="240" Height="120">
+                    <MediaElement Source="{Binding Trailer}" LoadedBehavior="Pause"/>
+                </StackPanel>
+            </DataTemplate>
+        </Grid.Resources>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
             <ColumnDefinition/>
@@ -25,14 +44,22 @@
         </Grid.RowDefinitions>
         <Menu Grid.Row="0">
             <MenuItem Header="File">
-                <MenuItem Header="Add film" Command="{Binding OpenInnerWindowCommand}" />
+                <MenuItem Header="Add film" Command="{Binding OpenInnerWindowCommand}"/>
+                <MenuItem Header="Delete film" Command="{Binding DeleteDataFromDataBaseCommand}"/>
+                <MenuItem Header="Edit film" Command="{Binding EditFilmCommand}"/>
                 <MenuItem Header="Exit" Command="{Binding CloseApplicationCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
+                <MenuItem Header="Refresh" Command="{Binding RefreshDataBaseCommand}"/>
             </MenuItem>
         </Menu>
-        <TextBlock Text="{Binding Films[0].Title}" TextWrapping="Wrap" Grid.Column="0" Grid.Row="0" Margin="10, 60, 10, 40" TextAlignment="Center"/>
-        <TextBlock Text="{Binding Films[0].Year}" Margin="0, 100, 0, 0" HorizontalAlignment="Center" Grid.Row="0"/>
-        <TextBlock Text="{Binding Films[0].Description}" TextWrapping="Wrap" Grid.Column="1" Grid.Row="0" Margin="10, 20, 10, 10" HorizontalAlignment="Center" TextAlignment="Justify"/>
-        <Image Source="{Binding Films[0].Icon}" Margin="10" Grid.Column="3" Grid.RowSpan="3"/>
-        <MediaElement Source="{Binding Films[0].Trailer}" Grid.Row="1" Grid.ColumnSpan="2" LoadedBehavior="Stop" Margin="0, 0, 0, 10" Grid.RowSpan="2"/>
+        <DataGrid ItemsSource="{Binding Films, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Grid.ColumnSpan="3" Grid.RowSpan="3" Margin="0, 20, 0, 0" AutoGenerateColumns="False"
+                  CanUserAddRows="False" CanUserReorderColumns="False" CanUserDeleteRows="False" SelectedItem="{Binding WhichFilm, Mode=TwoWay}" IsReadOnly="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header = "Ttile" Width="80" Binding="{Binding Title}"/>
+                <DataGridTextColumn Header = "Description" Width="200" Binding="{Binding Description}"/>
+                <DataGridTemplateColumn Header = "Icon" Width="80" CellTemplate="{StaticResource Icon}"/>
+                <DataGridTemplateColumn Header = "Trailer" Width="240" CellTemplate="{StaticResource Trailer}"/>
+                <DataGridTextColumn Header = "Year" Width="80" Binding="{Binding Year, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/> 
+            </DataGrid.Columns>
+        </DataGrid>
     </Grid>
 </Window>

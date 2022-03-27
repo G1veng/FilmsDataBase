@@ -10,6 +10,10 @@
     <Window.DataContext>
         <vm:AddFilmViewModel/>
     </Window.DataContext>
+    <Window.InputBindings>
+        <KeyBinding Command="{Binding SaveDataCommand}" Gesture="Ctrl + S"/>
+        <KeyBinding Command="{Binding CloseApplicationCommand}" Gesture="ESC"/>
+    </Window.InputBindings>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -26,14 +30,16 @@
         <Label Content="Description:" Height="40" Width="80" HorizontalAlignment="Left" Margin="0, -40, 0, 0"/>
         <TextBox Margin="80,40,10,85" Grid.ColumnSpan="3" Text="{Binding Path=Description, UpdateSourceTrigger=PropertyChanged}"/>
         <Label Content="Image:" Height="40" Width="80" HorizontalAlignment="Left" Margin="0, 40, 0, 0"/>
-        <TextBox Margin="80,80,10,45" Grid.ColumnSpan="3" Text="{Binding Path=Icon, UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBox Margin="80,80,10,45" Grid.ColumnSpan="3" Text="{Binding Path=Icon, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
         <Label Content="Trailer:" Height="40" Width="80" HorizontalAlignment="Left" Margin="0, 120, 0, 0"/>
-        <TextBox Margin="80,120,10,0" Grid.ColumnSpan="3" Text="{Binding Path=Trailer, UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBox Margin="80,120,10,0" Grid.ColumnSpan="3" Text="{Binding Path=Trailer, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
         <Label Content="Year:" Height="40" Width="80" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0, 0, 0, 0" Grid.Row="1"/>
         <TextBox Margin="80,5,10,120" Grid.ColumnSpan="3" Grid.Row="1" Text="{Binding Path=Year, UpdateSourceTrigger=PropertyChanged}"/>
-        <Button x:Name="SaveData" Content="Save" Grid.Column="1" Grid.Row="2" Margin="20, 120, 180, 5" Command="{Binding SaveDataCommand}"
+        <Button Content="Save" Grid.Column="1" Grid.Row="2" Margin="20, 120, 180, 5" Command="{Binding SaveDataCommand}"
                 CommandParameter=""/>
-        <Button x:Name="Cancel" Content="Cancel" Grid.Column="1" Grid.Row="2" Margin="180, 120, 20, 5" 
+        <Button Height="20" Width="20" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="50, 35, 0, 0" Content="+" Command="{Binding AddIconCommand}"/>
+        <Button Height="20" Width="20" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="50, 115, 0, 0" Content="+" Command="{Binding AddTrailerCommand}"/>
+        <Button Content="Return" Grid.Column="1" Grid.Row="2" Margin="180, 120, 20, 5" 
                 Command="{Binding CloseApplicationCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
     </Grid>
 </Window>

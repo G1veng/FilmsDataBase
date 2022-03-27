@@ -10,7 +10,6 @@ using FilmsDataBase.Views.Windows;
 using FilmsDataBase;
 using FilmsDataBase.Data;
 
-
 namespace FilmsDataBase
 {
   /// <summary>
@@ -18,13 +17,11 @@ namespace FilmsDataBase
   /// </summary>
   public partial class App : Application
   {
-
     public DisplayRootRegistry displayRootRegistry = new DisplayRootRegistry();
 
     public App()
     {
       displayRootRegistry.RegisterWindowType<AddFilmViewModel, AddFilmWindow>();
-      BaseOfFilms baseOfFilms = new BaseOfFilms();
     }
   }
 }

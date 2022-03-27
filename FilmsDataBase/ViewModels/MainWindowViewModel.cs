@@ -4,18 +4,51 @@ using FilmsDataBase.Infrastructure.Commands;
 using System.Windows;
 using System.Collections.Generic;
 using FilmsDataBase.Models;
+using FilmsDataBase.Services;
 using FilmsDataBase;
+using System;
+using System.Windows.Forms;
+using System.Collections.ObjectModel;
 
 namespace FilmsDataBase.ViewModels
 {
   internal class MainWindowViewModel : ViewModel
   {
+    private void NotificationFileUpdated()
+    {
+      System.Windows.MessageBox.Show(
+        "File updated",
+        "Notification",
+        (MessageBoxButton)MessageBoxButtons.OK,
+        (MessageBoxImage)MessageBoxIcon.Information,
+        (MessageBoxResult)MessageBoxDefaultButton.Button1,
+        System.Windows.MessageBoxOptions.DefaultDesktopOnly);
+    }
+    private MessageBoxResult Alarm(string message, string caption, MessageBoxButton button, MessageBoxImage icon)
+    {
+      return System.Windows.MessageBox.Show(message, caption, button, icon);
+    }
+
     #region SelectedWindow
     private DisplayRootRegistry displayRootRegistry;
     private AddFilmViewModel addFilmViewModel;
+    private Functionality functionality;
     #endregion
-    public List<Film> Films { get;}
-    public bool isOpened { get; set; }
+
+    #region Properties
+
+    #region Film
+    private ObservableCollection<Film> _films;
+    public ObservableCollection<Film> Films { get => _films; set => Set(ref _films, value); }
+    #endregion
+
+    #region WhichFilm
+    private Film _whichFilm;
+    public Film WhichFilm { get => _whichFilm; set => Set(ref _whichFilm, value); }
+    #endregion
+
+    #endregion
+
     #region Commands
 
     #region OpenInnerWindowComman 
@@ -23,7 +56,27 @@ namespace FilmsDataBase.ViewModels
     private bool CanOpenInnerWindowCommandExecute(object p) => !displayRootRegistry.CheckForExistingWindows(addFilmViewModel);
     private void OnOpenInnerWindowCommandExecuted(object p)
     {
-      addFilmViewModel = new AddFilmViewModel();
+      if (addFilmViewModel == null)
+        addFilmViewModel = new AddFilmViewModel();
+      addFilmViewModel.DisplayRootRegistry = displayRootRegistry;
+      displayRootRegistry.ShowPresentation(addFilmViewModel);
+    }
+    #endregion
+
+    #region EditFilmCommand
+    public ICommand EditFilmCommand { get; }
+    private bool CanEditFilmCommandExecute(object p) => WhichFilm != null && !functionality.IsEmpty();
+    private void OnEditFilmCommandExecuted(object p)
+    {
+      if(addFilmViewModel == null)
+        addFilmViewModel = new AddFilmViewModel();
+      addFilmViewModel.OldTitle = WhichFilm.Title;
+      addFilmViewModel.Title = WhichFilm.Title;
+      addFilmViewModel.Description = WhichFilm.Description;
+      addFilmViewModel.Icon = WhichFilm.Icon;
+      addFilmViewModel.Trailer = WhichFilm.Trailer;
+      addFilmViewModel.Year = WhichFilm.Year.ToString();
+      addFilmViewModel.IntYear = WhichFilm.Year;
       addFilmViewModel.DisplayRootRegistry = displayRootRegistry;
       displayRootRegistry.ShowPresentation(addFilmViewModel);
     }
@@ -33,29 +86,58 @@ namespace FilmsDataBase.ViewModels
     public ICommand CloseApplicationCommand { get;}
     private void OnCloseApplicationCommandExecuted(object p)
     {
-      if (p is Window window)
-        window.Close();
+      if (Alarm("Are you sure you want to close window?", "Word Processor", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+        System.Windows.Application.Current.Shutdown();
     }
     private bool CanCloseApplicationCommandExecute(object p) => true;
     #endregion
 
+    #region RefreshDataBaseCommand
+    public ICommand RefreshDataBaseCommand { get; }
+    private bool CanRefreshDataBaseCommandExecute(object p) => !functionality.IsEmpty();
+    private void OnRefreshDataBaseCommandExecuted(object p)
+    {
+      Films.Clear();
+      functionality.GetData();
+      for (int i = 0; i < functionality.innerFilms.Count; i++)
+      {
+        Films.Add((Film)functionality.innerFilms[i].Clone());
+      }
+      //NotificationFileUpdated();
+    }
+    #endregion
+
+    #region DeleteDataFromDataBaseCommand
+    public ICommand DeleteDataFromDataBaseCommand { get; }
+    private bool CanDeleteDataFromDataBaseCommandExecute(object p) => WhichFilm != null;
+    private void OnDeleteDataFromDataBaseCommandExecuted(object p)
+    {
+      functionality.DeleteData(WhichFilm.Title);
+      NotificationFileUpdated();
+    }
+    #endregion
 
     #endregion
     public MainWindowViewModel()
     {
-      displayRootRegistry = (Application.Current as App).displayRootRegistry;
-      Films = new List<Film>() 
-      { new Film{
-          Title = "Человек-паук: Нет пути домой",
-          Description = "Жизнь и репутация Питера Паркера оказываются под угрозой, поскольку Мистерио раскрыл всему миру тайну личности Человека-паука. Пытаясь исправить ситуацию, Питер обращается за помощью к Стивену Стрэнджу, но вскоре всё становится намного опаснее.",
-          Icon = @"D:\4 семестр\РПС\FilmsDataBase\Spider Man.jpg",
-          Trailer = @"D:\4 семестр\РПС\FilmsDataBase\SPIDER-MAN_ NO WAY HOME - Official Trailer (HD).mp4",
-          Year = 2021,
+      functionality = new Functionality();
+      Films = new ObservableCollection<Film>();
+      displayRootRegistry = (System.Windows.Application.Current as App).displayRootRegistry;
+      if (!functionality.IsEmpty())
+      {
+        functionality.GetData();
+        for(int i = 0; i < functionality.innerFilms.Count; i++)
+        {
+          Films.Add((Film)functionality.innerFilms[i].Clone());
         }
-      };
+      }
+
       #region Commands
       CloseApplicationCommand = new LambdaCommand(OnCloseApplicationCommandExecuted, CanCloseApplicationCommandExecute);
       OpenInnerWindowCommand = new LambdaCommand(OnOpenInnerWindowCommandExecuted, CanOpenInnerWindowCommandExecute);
+      RefreshDataBaseCommand = new LambdaCommand(OnRefreshDataBaseCommandExecuted, CanRefreshDataBaseCommandExecute);
+      DeleteDataFromDataBaseCommand = new LambdaCommand(OnDeleteDataFromDataBaseCommandExecuted, CanDeleteDataFromDataBaseCommandExecute);
+      EditFilmCommand = new LambdaCommand(OnEditFilmCommandExecuted, CanEditFilmCommandExecute);
       #endregion
     }
   }
