@@ -23,6 +23,7 @@ namespace FilmsDataBase
     {
       displayRootRegistry.RegisterWindowType<AddFilmViewModel, AddFilmWindow>();
       displayRootRegistry.RegisterWindowType<InformationAboutFilmWindowViewModel, InformationAboutFilmWindow>();
+      displayRootRegistry.RegisterWindowType<GreetingsWindowViewModel, GreetingsWindow>();
     }
   }
 }

@@ -15,24 +15,13 @@ using System.Windows.Shapes;
 namespace FilmsDataBase.Views.Windows
 {
   /// <summary>
-  /// Interaction logic for AddFilmWindow.xaml
+  /// Interaction logic for Greetings.xaml
   /// </summary>
-  public partial class AddFilmWindow : Window
+  public partial class GreetingsWindow : Window
   {
-    private bool isPlaying =  false;
-    public AddFilmWindow()
+    public GreetingsWindow()
     {
       InitializeComponent();
-      Video.Play();
-      Video.Stop();
-    }
-    private void MediaElement_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-    {
-      if (isPlaying)
-        Video.Pause();
-      if (!isPlaying)
-        Video.Play();
-      isPlaying = isPlaying == false ? true : false;
     }
   }
 }

@@ -4,11 +4,13 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="clr-namespace:FilmsDataBase.ViewModels"
-        xmlns:cmd="clr-namespace:FilmsDataBase.Infrastructure.Commands"
-        xmlns:add="clr-namespace:FilmsDataBase.Views.Windows"
-        xmlns:local="clr-namespace:FilmsDataBase" xmlns:system="clr-namespace:System;assembly=mscorlib"
+        xmlns:local="clr-namespace:FilmsDataBase"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="🐯📺🐵" Height="450" Width="645"
+        Background="#9370DB"
+        Icon="D:\4 семестр\РПС\FilmsDataBase\Violet-smile.ico"
+        MinHeight="450"
+        MaxHeight="450">
     <Window.DataContext>
         <vm:MainWindowViewModel/>
     </Window.DataContext>
@@ -43,7 +45,7 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Menu Grid.Row="0">
+        <Menu Grid.Row="0" Background="#9370DB">
             <MenuItem Header="File">
                 <MenuItem Header="Add film" Command="{Binding OpenInnerWindowCommand}"/>
                 <MenuItem Header="Delete film" Command="{Binding DeleteDataFromDataBaseCommand}"/>
@@ -52,15 +54,17 @@
                 <MenuItem Header="Refresh" Command="{Binding RefreshDataBaseCommand}"/>
                 <MenuItem Header="Information about film" Command="{Binding InformationAboutFilmCommand}"/>
             </MenuItem>
+            <MenuItem Header="Information" Command="{Binding OpenGreetingWindowCommand}" CommandParameter="true"/>
         </Menu>
         <DataGrid ItemsSource="{Binding Films, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Grid.ColumnSpan="3" Grid.RowSpan="3" Margin="0, 20, 0, 0" AutoGenerateColumns="False"
-                  CanUserAddRows="False" CanUserReorderColumns="False" CanUserDeleteRows="False" SelectedItem="{Binding WhichFilm, Mode=TwoWay}" IsReadOnly="True">
+                  CanUserAddRows="False" CanUserReorderColumns="False" CanUserDeleteRows="False" SelectedItem="{Binding WhichFilm, Mode=TwoWay}" IsReadOnly="True"
+                  Background="#cbb6ee">
             <DataGrid.Columns>
                 <DataGridTextColumn Header = "Ttile" Width="100" Binding="{Binding Title}" />
                 <DataGridTextColumn Header = "Description" Width="140" Binding="{Binding Description}"/>
                 <DataGridTemplateColumn Header = "Icon" Width="auto" CellTemplate="{StaticResource Icon}"/>
                 <DataGridTemplateColumn Header = "Trailer" Width="auto" CellTemplate="{StaticResource Trailer}"/>
-                <DataGridTextColumn Header = "Year" Width="auto" Binding="{Binding Year, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/> 
+                <DataGridTextColumn Header = "Year" Width="auto" Binding="{Binding Year}"/>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

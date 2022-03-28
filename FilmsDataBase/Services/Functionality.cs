@@ -1,13 +1,11 @@
 ﻿using FilmsDataBase.Models;
 using System.Collections.Generic;
 using FilmsDataBase.Data;
-using FilmsDataBase.ViewModels.Base;
 
 namespace FilmsDataBase.Services
 {
   internal class Functionality
   {
-  
     private BaseOfFilms baseOfFilms = new BaseOfFilms();
     public List<Film> innerFilms;
     public void GetData()

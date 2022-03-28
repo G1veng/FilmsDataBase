@@ -143,9 +143,14 @@
     <Compile Include="Services\Functionality.cs" />
     <Compile Include="ViewModels\AddFilmViewModel.cs" />
     <Compile Include="ViewModels\Base\ViewModel.cs" />
+    <Compile Include="ViewModels\GreetingsWindowViewModel.cs" />
     <Compile Include="ViewModels\InformationAboutFilmWindowViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Page Include="Views\Windows\AddFilmWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Windows\GreetingsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -163,6 +168,9 @@
     </Compile>
     <Compile Include="Views\Windows\AddFilmWindow.xaml.cs">
       <DependentUpon>AddFilmWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Windows\GreetingsWindow.xaml.cs">
+      <DependentUpon>GreetingsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Windows\InformationAboutFilmWindow.xaml.cs">
       <DependentUpon>InformationAboutFilmWindow.xaml</DependentUpon>

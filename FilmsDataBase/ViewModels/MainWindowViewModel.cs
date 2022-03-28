@@ -2,13 +2,12 @@
 using System.Windows.Input;
 using FilmsDataBase.Infrastructure.Commands;
 using System.Windows;
-using System.Collections.Generic;
 using FilmsDataBase.Models;
 using FilmsDataBase.Services;
-using FilmsDataBase;
-using System;
 using System.Windows.Forms;
 using System.Collections.ObjectModel;
+using System.IO;
+using System;
 
 namespace FilmsDataBase.ViewModels
 {
@@ -29,6 +28,7 @@ namespace FilmsDataBase.ViewModels
     private DisplayRootRegistry displayRootRegistry;
     private AddFilmViewModel addFilmViewModel;
     private InformationAboutFilmWindowViewModel informationAboutFilmWindowViewModel;
+    private GreetingsWindowViewModel greetingsWindowViewModel;
     private Functionality functionality;
     #endregion
 
@@ -86,6 +86,54 @@ namespace FilmsDataBase.ViewModels
     }
     #endregion
 
+    #region OpenGreetingWindowCommand
+    public ICommand OpenGreetingWindowCommand { get; }
+    private bool CanOpenGreetingWindowCommandExecute(object p) => !displayRootRegistry.CheckForExistingWindows(greetingsWindowViewModel);
+    public void OnOpenGreetingWindowCommandExxecuted(object p)
+    {
+      bool Agreement;
+      FileStream createFile = null;
+      StreamReader file = null;
+      try
+      {
+        file = new StreamReader("Agreement.txt");
+      }
+      catch
+      {
+        createFile = File.Create("Agreement.txt");
+        createFile.Close();
+        file = new StreamReader("Agreement.txt");
+      }
+      Agreement = false;
+      if (file != null)
+      {
+        string yesOrNo = file.ReadLine();
+        if (yesOrNo != null)
+          Agreement = bool.Parse(yesOrNo);
+        file.Close();
+      }
+      if(greetingsWindowViewModel == null)
+        greetingsWindowViewModel = new GreetingsWindowViewModel();
+      if (Agreement)
+        greetingsWindowViewModel.IsChecked = true;
+      else
+        greetingsWindowViewModel.IsChecked = false;
+      if (Convert.ToBoolean(p))
+      {
+        greetingsWindowViewModel.DisplayRootRegistry = displayRootRegistry;
+        displayRootRegistry.ShowPresentation(greetingsWindowViewModel);
+      }
+      else
+      {
+        if (!Agreement)
+        {
+          greetingsWindowViewModel.DisplayRootRegistry = displayRootRegistry;
+          displayRootRegistry.ShowPresentation(greetingsWindowViewModel);
+        }
+      }
+    }
+    #endregion
+
     #region EditFilmCommand
     public ICommand EditFilmCommand { get; }
     private bool CanEditFilmCommandExecute(object p) => WhichFilm != null && !functionality.IsEmpty() &&
@@ -113,7 +161,8 @@ namespace FilmsDataBase.ViewModels
       System.Windows.Application.Current.Shutdown();
     }
     private bool CanCloseApplicationCommandExecute(object p) => !displayRootRegistry.CheckForExistingWindows(addFilmViewModel) &&
-      !displayRootRegistry.CheckForExistingWindows(informationAboutFilmWindowViewModel);
+      !displayRootRegistry.CheckForExistingWindows(informationAboutFilmWindowViewModel) && 
+      !displayRootRegistry.CheckForExistingWindows(greetingsWindowViewModel);
     #endregion
 
     #region RefreshDataBaseCommand
@@ -156,6 +205,7 @@ namespace FilmsDataBase.ViewModels
         }
       }
 
+      OnOpenGreetingWindowCommandExxecuted(false);
       #region Commands
       CloseApplicationCommand = new LambdaCommand(OnCloseApplicationCommandExecuted, CanCloseApplicationCommandExecute);
       OpenInnerWindowCommand = new LambdaCommand(OnOpenInnerWindowCommandExecuted, CanOpenInnerWindowCommandExecute);
@@ -163,6 +213,7 @@ namespace FilmsDataBase.ViewModels
       DeleteDataFromDataBaseCommand = new LambdaCommand(OnDeleteDataFromDataBaseCommandExecuted, CanDeleteDataFromDataBaseCommandExecute);
       EditFilmCommand = new LambdaCommand(OnEditFilmCommandExecuted, CanEditFilmCommandExecute);
       InformationAboutFilmCommand = new LambdaCommand(OnInformationAboutFilmCommandExecuted, CanInformationAboutFilmCommandExecute);
+      OpenGreetingWindowCommand = new LambdaCommand(OnOpenGreetingWindowCommandExxecuted, CanOpenGreetingWindowCommandExecute);
       #endregion
     }
   }

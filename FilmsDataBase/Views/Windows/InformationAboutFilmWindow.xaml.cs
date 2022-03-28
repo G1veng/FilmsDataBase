@@ -19,15 +19,13 @@ namespace FilmsDataBase.Views.Windows
   /// </summary>
   public partial class InformationAboutFilmWindow : Window
   {
-    bool isPlaying = false;
-
+    private bool isPlaying = false;
     public InformationAboutFilmWindow()
     {
       InitializeComponent();
       Video.Play();
       Video.Pause();
     }
-
     private void Video_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
       if (isPlaying)

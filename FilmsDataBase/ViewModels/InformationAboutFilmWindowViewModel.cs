@@ -1,5 +1,4 @@
-﻿using System;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 using FilmsDataBase.ViewModels.Base;
 using FilmsDataBase.Infrastructure.Commands;
 
