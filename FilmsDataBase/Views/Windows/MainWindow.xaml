@@ -21,6 +21,7 @@
         <KeyBinding Command="{Binding CloseApplicationCommand}" Gesture="ESC"/>
         <KeyBinding Command="{Binding EditFilmCommand}" Gesture="Ctrl + E"/>
         <KeyBinding Command="{Binding InformationAboutFilmCommand}" Gesture="Ctrl + I"/>
+        <KeyBinding Command="{Binding OpenGreetingWindowCommand}" Gesture="Ctrl + G" CommandParameter="true"/>
     </Window.InputBindings>
     <Grid>
         <Grid.Resources>
