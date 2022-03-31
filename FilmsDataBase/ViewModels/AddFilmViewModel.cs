@@ -4,6 +4,7 @@ using FilmsDataBase.Infrastructure.Commands;
 using FilmsDataBase.Services;
 using System.Windows;
 using System.Windows.Forms;
+using System;
 
 namespace FilmsDataBase.ViewModels
 {
@@ -42,10 +43,10 @@ namespace FilmsDataBase.ViewModels
     private string _trailer;
     public string Trailer { get => _trailer; set => Set(ref _trailer, value); }
 
-    private string _year;
-    public string Year { get => _year; set => Set(ref _year, value); }
-    private int _intYear;
-    public int IntYear { get => _intYear; set => Set(ref _intYear, value); }
+    private DateTime _year;
+    public DateTime Year { get => _year; set => Set(ref _year, value); }
+    //private int _intYear;
+    //public int IntYear { get => _intYear; set => Set(ref _intYear, value); }
     private string _oldTitle;
     public string OldTitle { get => _oldTitle; set => Set(ref _oldTitle, value); }
     #endregion
@@ -68,9 +69,9 @@ namespace FilmsDataBase.ViewModels
     {
       Functionality functionality = new Functionality();
       if (functionality.IsEmpty() || !functionality.Exist(OldTitle))
-        functionality.SetData(Title, Description, Icon, Trailer, IntYear);
+        functionality.SetData(Title, Description, Icon, Trailer, Year);
       else
-        functionality.UpdataDataBase(OldTitle, Title, Description, Icon, Trailer, IntYear);
+        functionality.UpdataDataBase(OldTitle, Title, Description, Icon, Trailer, Year);
       NotificationFileSaved();
     }
     private bool CanSaveDataCommandExecute(object p) 
@@ -79,8 +80,6 @@ namespace FilmsDataBase.ViewModels
       if (Description == string.Empty || Description == null) return false;
       if (Icon == string.Empty || Icon == null) return false;
       if (Trailer == string.Empty || Trailer == null) return false;
-      if (!int.TryParse(Year, out int year) || year < 1908) return false;
-      IntYear = year;
       return true;
     }
     #endregion

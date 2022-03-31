@@ -25,10 +25,10 @@ namespace FilmsDataBase.ViewModels
     private string _trailer;
     public string Trailer { get => _trailer; set => Set(ref _trailer, value); }
 
-    private string _year;
-    public string Year { get => _year; set => Set(ref _year, value); }
+    private System.DateTime _year;
+    public System.DateTime Year { get => _year; set => Set(ref _year, value); }
     private int _intYear;
-    public int IntYear { get => _intYear; set => Set(ref _intYear, value); }
+    /*public int IntYear { get => _intYear; set => Set(ref _intYear, value); }*/
     private string _oldTitle;
     public string OldTitle { get => _oldTitle; set => Set(ref _oldTitle, value); }
     #endregion

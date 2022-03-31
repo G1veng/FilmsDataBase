@@ -20,14 +20,14 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <TextBlock Grid.Row="0" Text="  It is necessary to perform a task from the options of the usual complexity using
-            the MVC pattern (or MVVM if WPF is used) and the Autofac library for
-            dependency injection. It is necessary to use asynchronous connection to the DBMS
-        (SQLiteAsyncConnection)" TextWrapping="Wrap" TextAlignment="Justify" Margin="5"/>
+the MVC pattern (or MVVM if WPF is used) and the Autofac library for
+dependency injection. It is necessary to use asynchronous connection to the DBMS
+(SQLiteAsyncConnection)" TextWrapping="Wrap" TextAlignment="Justify" Margin="5"/>
         <TextBlock Grid.Row="0" Margin="5, 70, 5, 0" Text=" The program should allow you to add new entities
-            using the interface and edit existing ones. Entities added to the
-            program must be saved between application launches. To store data
-            , you need to use the SQLite DBMS. It is necessary to provide for the possibility
-            of saving a list of existing entities to a file." TextWrapping="Wrap" 
+using the interface and edit existing ones. Entities added to the
+program must be saved between application launches. To store data,
+you need to use the SQLite DBMS. It is necessary to provide for the possibility
+of saving a list of existing entities to a file." TextWrapping="Wrap" 
         TextAlignment="Justify"/>
         <CheckBox x:Name="CheckBox" Grid.Row="1" Height="20" Width="20" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="50, 0, 0, 0"
                   IsChecked="{Binding IsChecked, Mode=TwoWay}"/>

@@ -34,5 +34,13 @@ namespace FilmsDataBase.Views.Windows
         Video.Play();
       isPlaying = isPlaying == false ? true : false;
     }
+
+    private void Button_Click(object sender, RoutedEventArgs e)
+    {
+      if(Calendar.IsVisible)
+        Calendar.Visibility = Visibility.Hidden;
+      else
+        Calendar.Visibility = Visibility.Visible;
+    }
   }
 }

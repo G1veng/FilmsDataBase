@@ -60,8 +60,7 @@ namespace FilmsDataBase.ViewModels
       informationAboutFilmWindowViewModel.Description = WhichFilm.Description;
       informationAboutFilmWindowViewModel.Icon = WhichFilm.Icon;
       informationAboutFilmWindowViewModel.Trailer = WhichFilm.Trailer;
-      informationAboutFilmWindowViewModel.Year = WhichFilm.Year.ToString();
-      informationAboutFilmWindowViewModel.IntYear = WhichFilm.Year;
+      informationAboutFilmWindowViewModel.Year = WhichFilm.Year;
       informationAboutFilmWindowViewModel.DisplayRootRegistry = displayRootRegistry;
       displayRootRegistry.ShowPresentation(informationAboutFilmWindowViewModel);
     }
@@ -79,8 +78,7 @@ namespace FilmsDataBase.ViewModels
       addFilmViewModel.Description = "";
       addFilmViewModel.Icon = "";
       addFilmViewModel.Trailer = "";
-      addFilmViewModel.Year = "";
-      addFilmViewModel.IntYear = new int();
+      addFilmViewModel.Year = new DateTime();
       addFilmViewModel.DisplayRootRegistry = displayRootRegistry;
       displayRootRegistry.ShowPresentation(addFilmViewModel);
     }
@@ -147,8 +145,7 @@ namespace FilmsDataBase.ViewModels
       addFilmViewModel.Description = WhichFilm.Description;
       addFilmViewModel.Icon = WhichFilm.Icon;
       addFilmViewModel.Trailer = WhichFilm.Trailer;
-      addFilmViewModel.Year = WhichFilm.Year.ToString();
-      addFilmViewModel.IntYear = WhichFilm.Year;
+      addFilmViewModel.Year = WhichFilm.Year;
       addFilmViewModel.DisplayRootRegistry = displayRootRegistry;
       displayRootRegistry.ShowPresentation(addFilmViewModel);
     }

@@ -17,7 +17,7 @@ namespace FilmsDataBase.Services
       int counter = 0;
       for (int i = baseOfFilms.GetFirstId(); counter < baseOfFilms.GetCountOfRows(); i++)
       {
-        if (!baseOfFilms.FindInBase(out string title, out string description, out string icon, out string trailer, out int year, i))
+        if (!baseOfFilms.FindInBase(out string title, out string description, out string icon, out string trailer, out System.DateTime year, i))
         {
           continue;
         }
@@ -32,11 +32,11 @@ namespace FilmsDataBase.Services
         counter++;
       }
     }
-    public void SetData(string title, string description, string icon, string trailer, int year) =>
-      baseOfFilms.AddToBase(title, description, icon, trailer, year);
-    public void DeleteData(string title) => baseOfFilms.DeleteFromBase(title);
-    public void UpdataDataBase(string title, string newTitle, string newDescription, string newIcon, string newTrailer, int newYear) =>
-      baseOfFilms.UpdateBase(title, newTitle, newDescription, newIcon, newTrailer, newYear);
+    public void SetData(string title, string description, string icon, string trailer, System.DateTime year) =>
+      baseOfFilms.AddToBase(title, description, icon, trailer, year).Wait();
+    public void DeleteData(string title) => baseOfFilms.DeleteFromBase(title).Wait();
+    public void UpdataDataBase(string title, string newTitle, string newDescription, string newIcon, string newTrailer, System.DateTime newYear) =>
+      baseOfFilms.UpdateBase(title, newTitle, newDescription, newIcon, newTrailer, newYear).Wait();
     public bool Exist(string title) => baseOfFilms.Exist(title);
     public bool IsEmpty() => baseOfFilms.GetCountOfRows() == 0;
   }
