@@ -4,7 +4,7 @@ using FilmsDataBase.Infrastructure.Commands;
 
 namespace FilmsDataBase.ViewModels
 {
-  internal class InformationAboutFilmWindowViewModel : ViewModel
+  public class InformationAboutFilmWindowViewModel : ViewModel
   {
     #region Properties
     private DisplayRootRegistry _displayRootRegistry;
@@ -27,7 +27,7 @@ namespace FilmsDataBase.ViewModels
 
     private System.DateTime _year;
     public System.DateTime Year { get => _year; set => Set(ref _year, value); }
-    private int _intYear;
+    //private int _intYear;
     /*public int IntYear { get => _intYear; set => Set(ref _intYear, value); }*/
     private string _oldTitle;
     public string OldTitle { get => _oldTitle; set => Set(ref _oldTitle, value); }

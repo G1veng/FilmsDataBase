@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 
 namespace FilmsDataBase.ViewModels.Base
 {
-  internal abstract class ViewModel : INotifyPropertyChanged
+  public abstract class ViewModel : INotifyPropertyChanged
   {
     public event PropertyChangedEventHandler PropertyChanged;
     protected virtual void OnPropertyChanged([CallerMemberName] string PropertyName = null)

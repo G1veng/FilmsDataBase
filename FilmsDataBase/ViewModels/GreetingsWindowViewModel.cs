@@ -7,7 +7,7 @@ using System;
 
 namespace FilmsDataBase.ViewModels
 {
-  internal class GreetingsWindowViewModel : ViewModel
+  public class GreetingsWindowViewModel : ViewModel
   {
     #region Properties
     private  bool _isChecked;

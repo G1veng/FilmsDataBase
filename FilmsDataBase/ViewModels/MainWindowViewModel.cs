@@ -3,16 +3,37 @@ using System.Windows.Input;
 using FilmsDataBase.Infrastructure.Commands;
 using System.Windows;
 using FilmsDataBase.Models;
-using FilmsDataBase.Services;
 using System.Windows.Forms;
 using System.Collections.ObjectModel;
 using System.IO;
 using System;
+using FilmsDataBase.Infrastructure;
+using System.Collections.Generic;
+using Autofac;
+using FilmsDataBase.Data;
+using FilmsDataBase.Services;
 
 namespace FilmsDataBase.ViewModels
 {
-  internal class MainWindowViewModel : ViewModel
+  public class MainWindowViewModel : ViewModel
   {
+    public MainWindowViewModel(IFilmService concentrationService)
+    {
+      _concentrationService = concentrationService ?? throw new ArgumentNullException(nameof(concentrationService));
+
+      var filmServiceBuilder = new ContainerBuilder();
+      filmServiceBuilder.RegisterType<Repository>().As<IRepository>();
+      filmServiceBuilder.RegisterType<FilmService>();
+      _repositoryService = filmServiceBuilder.Build();
+
+      var addFilmWindowBuilder = new ContainerBuilder();
+      addFilmWindowBuilder.RegisterType<FilmService>().As<IFilmService>();
+      addFilmWindowBuilder.RegisterType<AddFilmViewModel>();
+      _addFilmWindowService = addFilmWindowBuilder.Build();
+
+      _repositoryService.Resolve<FilmService>();
+      _addFilmWindowService.Resolve<AddFilmViewModel>();
+    }
     private void NotificationFileUpdated()
     {
       System.Windows.MessageBox.Show(
@@ -24,12 +45,16 @@ namespace FilmsDataBase.ViewModels
         System.Windows.MessageBoxOptions.DefaultDesktopOnly);
     }
 
+    private static IFilmService _concentrationService = null;
+
+    private static IContainer _addFilmWindowService = null;
+    private static IContainer _repositoryService = null;
+
     #region SelectedWindow
     private DisplayRootRegistry displayRootRegistry;
     private AddFilmViewModel addFilmViewModel;
     private InformationAboutFilmWindowViewModel informationAboutFilmWindowViewModel;
     private GreetingsWindowViewModel greetingsWindowViewModel;
-    private Functionality functionality;
     #endregion
 
     #region Properties
@@ -50,7 +75,7 @@ namespace FilmsDataBase.ViewModels
 
     #region InformationAboutFilmCommand
     public ICommand InformationAboutFilmCommand { get; }
-    private bool CanInformationAboutFilmCommandExecute(object p) => WhichFilm != null && !functionality.IsEmpty() &&
+    private bool CanInformationAboutFilmCommandExecute(object p) => WhichFilm != null && !_concentrationService.IsEmpty() &&
       !displayRootRegistry.CheckForExistingWindows(informationAboutFilmWindowViewModel);
     private void OnInformationAboutFilmCommandExecuted(object p)
     {
@@ -134,7 +159,7 @@ namespace FilmsDataBase.ViewModels
 
     #region EditFilmCommand
     public ICommand EditFilmCommand { get; }
-    private bool CanEditFilmCommandExecute(object p) => WhichFilm != null && !functionality.IsEmpty() &&
+    private bool CanEditFilmCommandExecute(object p) => WhichFilm != null && !_concentrationService.IsEmpty() &&
       !displayRootRegistry.CheckForExistingWindows(addFilmViewModel);
     private void OnEditFilmCommandExecuted(object p)
     {
@@ -164,16 +189,15 @@ namespace FilmsDataBase.ViewModels
 
     #region RefreshDataBaseCommand
     public ICommand RefreshDataBaseCommand { get; }
-    private bool CanRefreshDataBaseCommandExecute(object p) => !functionality.IsEmpty();
+    private bool CanRefreshDataBaseCommandExecute(object p) => !_concentrationService.IsEmpty();
     private void OnRefreshDataBaseCommandExecuted(object p)
     {
       Films.Clear();
-      functionality.GetData();
-      for (int i = 0; i < functionality.innerFilms.Count; i++)
+      List<Film> someFilms = _concentrationService.GetData();
+      for (int i = 0; i < someFilms.Count; i++)
       {
-        Films.Add((Film)functionality.innerFilms[i].Clone());
+        Films.Add((Film)someFilms[i].Clone());
       }
-      //NotificationFileUpdated();
     }
     #endregion
 
@@ -182,23 +206,23 @@ namespace FilmsDataBase.ViewModels
     private bool CanDeleteDataFromDataBaseCommandExecute(object p) => WhichFilm != null;
     private void OnDeleteDataFromDataBaseCommandExecuted(object p)
     {
-      functionality.DeleteData(WhichFilm.Title);
+      _concentrationService.DeleteData(WhichFilm.Title);
       NotificationFileUpdated();
     }
     #endregion
 
     #endregion
+    
     public MainWindowViewModel()
     {
-      functionality = new Functionality();
       Films = new ObservableCollection<Film>();
       displayRootRegistry = (System.Windows.Application.Current as App).displayRootRegistry;
-      if (!functionality.IsEmpty())
+      if (!_concentrationService.IsEmpty())
       {
-        functionality.GetData();
-        for(int i = 0; i < functionality.innerFilms.Count; i++)
+        List<Film> someFilms = _concentrationService.GetData();
+        for(int i = 0; i < someFilms.Count; i++)
         {
-          Films.Add((Film)functionality.innerFilms[i].Clone());
+          Films.Add((Film)someFilms[i].Clone());
         }
       }
 

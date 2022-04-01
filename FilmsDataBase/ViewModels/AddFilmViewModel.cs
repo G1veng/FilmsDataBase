@@ -1,16 +1,20 @@
 ﻿using FilmsDataBase.ViewModels.Base;
 using System.Windows.Input;
 using FilmsDataBase.Infrastructure.Commands;
-using FilmsDataBase.Services;
 using System.Windows;
 using System.Windows.Forms;
 using System;
+using FilmsDataBase.Infrastructure;
 
 namespace FilmsDataBase.ViewModels
 {
   
-  internal class AddFilmViewModel : ViewModel
+  public class AddFilmViewModel : ViewModel
   {
+
+    private static IFilmService _concentrationService;
+    public AddFilmViewModel(IFilmService concentrationService) =>
+      _concentrationService = concentrationService ?? throw new ArgumentNullException(nameof(concentrationService));
     private void NotificationFileSaved()
     {
       System.Windows.MessageBox.Show(
@@ -25,6 +29,7 @@ namespace FilmsDataBase.ViewModels
       System.Windows.MessageBox.Show(message, caption, button, icon);
 
     #region Properties
+
     private DisplayRootRegistry _displayRootRegistry;
     public DisplayRootRegistry DisplayRootRegistry
     {
@@ -45,8 +50,6 @@ namespace FilmsDataBase.ViewModels
 
     private DateTime _year;
     public DateTime Year { get => _year; set => Set(ref _year, value); }
-    //private int _intYear;
-    //public int IntYear { get => _intYear; set => Set(ref _intYear, value); }
     private string _oldTitle;
     public string OldTitle { get => _oldTitle; set => Set(ref _oldTitle, value); }
     #endregion
@@ -67,11 +70,10 @@ namespace FilmsDataBase.ViewModels
     public ICommand SaveDataCommand { get; }
     private void OnSaveDataCommandExecuted(object p)
     {
-      Functionality functionality = new Functionality();
-      if (functionality.IsEmpty() || !functionality.Exist(OldTitle))
-        functionality.SetData(Title, Description, Icon, Trailer, Year);
+      if (_concentrationService.IsEmpty() || !_concentrationService.Exist(OldTitle))
+        _concentrationService.SetData(Title, Description, Icon, Trailer, Year);
       else
-        functionality.UpdataDataBase(OldTitle, Title, Description, Icon, Trailer, Year);
+        _concentrationService.UpdataDataBase(OldTitle, Title, Description, Icon, Trailer, Year);
       NotificationFileSaved();
     }
     private bool CanSaveDataCommandExecute(object p) 
@@ -100,7 +102,7 @@ namespace FilmsDataBase.ViewModels
     private bool CanAddIconCommandExecute(object p) => true;
     #endregion
 
-    #region AddTraileCommand
+    #region AddTrailerCommand
     public ICommand AddTrailerCommand { get; }
     private void OnAddTrailerCommandExecuted(object p)
     {
@@ -123,6 +125,8 @@ namespace FilmsDataBase.ViewModels
     #endregion
 
     #endregion
+
+    
 
     public AddFilmViewModel()
     {

@@ -2,7 +2,7 @@
 
 namespace FilmsDataBase.Models
 {
-  internal class Film
+  public class Film
   {
     public string Title { get; set; }
     public string Description { get; set; }
