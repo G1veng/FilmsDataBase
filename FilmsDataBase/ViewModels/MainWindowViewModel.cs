@@ -19,10 +19,8 @@ namespace FilmsDataBase.ViewModels
   {
     #region Autofac
     private static IFilmService _concentrationService = null;
-    public MainWindowViewModel(IFilmService concentrationService)
-    {
+    public MainWindowViewModel(IFilmService concentrationService) =>
       _concentrationService = concentrationService ?? throw new ArgumentNullException(nameof(concentrationService));
-    }
     #endregion
     private void NotificationFileUpdated()
     {
@@ -89,6 +87,7 @@ namespace FilmsDataBase.ViewModels
       addFilmViewModel.Icon = "";
       addFilmViewModel.Trailer = "";
       addFilmViewModel.Year = new DateTime();
+      addFilmViewModel.id = new int();
       addFilmViewModel.DisplayRootRegistry = displayRootRegistry;
       displayRootRegistry.ShowPresentation(addFilmViewModel);
     }
@@ -151,6 +150,7 @@ namespace FilmsDataBase.ViewModels
       if(addFilmViewModel == null)
         addFilmViewModel = new AddFilmViewModel();
       addFilmViewModel.OldTitle = WhichFilm.Title;
+      addFilmViewModel.id = WhichFilm.Id;
       addFilmViewModel.Title = WhichFilm.Title;
       addFilmViewModel.Description = WhichFilm.Description;
       addFilmViewModel.Icon = WhichFilm.Icon;
@@ -191,7 +191,7 @@ namespace FilmsDataBase.ViewModels
     private bool CanDeleteDataFromDataBaseCommandExecute(object p) => WhichFilm != null;
     private void OnDeleteDataFromDataBaseCommandExecuted(object p)
     {
-      _concentrationService.DeleteData(WhichFilm.Title);
+      _concentrationService.DeleteData(WhichFilm.Id);
       NotificationFileUpdated();
     }
     #endregion

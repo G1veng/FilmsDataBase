@@ -9,10 +9,10 @@ namespace FilmsDataBase.Data
 {
   internal class Repository : IRepository
   {
-    public async Task UpdateBase(RawFilm film, string oldTitle)
+    public async Task UpdateBase(RawFilm film, int id)
     {
       string sqlExpression = $"UPDATE Films SET Title = @Title, Description = @Description" +
-        $", Icon = @Icon, Trailer = @Trailer, Year = @Year WHERE Title = @OldTitle";
+        $", Icon = @Icon, Trailer = @Trailer, Year = @Year WHERE id = @Id";
       using (var connection = new SqliteConnection(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString))
       {
         connection.Open();
@@ -22,7 +22,7 @@ namespace FilmsDataBase.Data
         command.Parameters.Add(new SqliteParameter("@Icon", film.Icon));
         command.Parameters.Add(new SqliteParameter("@Trailer", film.Trailer));
         command.Parameters.Add(new SqliteParameter("@Year", film.Year));
-        command.Parameters.Add(new SqliteParameter("@OldTitle", oldTitle));
+        command.Parameters.Add(new SqliteParameter("@Id", id));
         await command.ExecuteNonQueryAsync();
         connection.Close();
       }
@@ -48,6 +48,7 @@ namespace FilmsDataBase.Data
       film.Icon = null;
       film.Trailer = null;
       film.Year = new DateTime();
+      film.Id = new int();
       string sqlExpression = $"SELECT * FROM Films WHERE (id = @Id)";
       using (var connection = new SqliteConnection(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString))
       {
@@ -62,28 +63,27 @@ namespace FilmsDataBase.Data
           if (!reader.HasRows) return film;
           while (reader.Read())
           {
-            int innerId = Convert.ToInt32(reader.GetValue(0));
+            film.Id = Convert.ToInt32(reader.GetValue(0));
             film.Title = (string)reader.GetValue(1);
             film.Description = (string)reader.GetValue(2);
             film.Icon = (string)reader.GetValue(3);
             film.Trailer = (string)reader.GetValue(4);
             film.Year = Convert.ToDateTime(reader.GetValue(5));
-            if (innerId == id) break;
+            if (film.Id == id) break;
           }
         }
         connection.Close();
       }
       return film;
     }
-    public bool Exist(string Title)
+    public bool Exist(int id)
     {
-      if(Title == string.Empty || Title == null) return false;
-      string sqlExpression = $"SELECT * FROM Films WHERE (Title = @Title)";
+      string sqlExpression = $"SELECT * FROM Films WHERE (id = @Id)";
       using (var connection = new SqliteConnection(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString))
       {
         connection.Open();
         SqliteCommand command = new SqliteCommand(sqlExpression, connection);
-        command.Parameters.Add(new SqliteParameter("@Title", Title));
+        command.Parameters.Add(new SqliteParameter("@Id", id));
         if (Convert.ToInt32(command.ExecuteScalar()) == 0) return false;
         return true;
       }
@@ -108,14 +108,14 @@ namespace FilmsDataBase.Data
         return Convert.ToInt32(command.ExecuteScalar());
       }
     }
-    public async Task DeleteFromBase(string title)
+    public async Task DeleteFromBase(int id)
     {
       using (var connection = new SqliteConnection(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString))
       {
         connection.Open();
-        string sqlExpression = $"DELETE FROM Films where (Title = @Title)";
+        string sqlExpression = $"DELETE FROM Films where (id = @Id)";
         SqliteCommand command = new SqliteCommand(sqlExpression, connection);
-        command.Parameters.Add(new SqliteParameter("@Title", title));
+        command.Parameters.Add(new SqliteParameter("@Id", id));
         await command.ExecuteNonQueryAsync();
         connection.Close();
       }

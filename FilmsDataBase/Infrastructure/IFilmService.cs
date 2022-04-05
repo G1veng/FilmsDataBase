@@ -7,9 +7,9 @@ namespace FilmsDataBase.Infrastructure
   {
     List<Film> GetData();
     void SetData(string title, string description, string icon, string trailer, System.DateTime year);
-    void DeleteData(string title);
-    void UpdataDataBase(string title, string newTitle, string newDescription, string newIcon, string newTrailer, System.DateTime newYear);
-    bool Exist(string title);
+    void DeleteData(int id);
+    void UpdataDataBase(int id, string newTitle, string newDescription, string newIcon, string newTrailer, System.DateTime newYear);
+    bool Exist(int id);
     bool IsEmpty();
   }
 }

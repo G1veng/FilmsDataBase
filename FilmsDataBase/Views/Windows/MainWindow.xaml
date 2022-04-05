@@ -6,7 +6,8 @@
         Background="#9370DB"
         Icon="D:\4 семестр\РПС\FilmsDataBase\Violet-smile.ico"
         MinHeight="450"
-        MaxHeight="450">
+        MaxHeight="450"
+        MinWidth="750">
     <Window.DataContext>
         <vm:MainWindowViewModel/>
     </Window.DataContext>

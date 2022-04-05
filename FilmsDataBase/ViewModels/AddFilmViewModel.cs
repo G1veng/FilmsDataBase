@@ -11,10 +11,11 @@ namespace FilmsDataBase.ViewModels
   
   public class AddFilmViewModel : ViewModel
   {
-
+    #region Autofac
     private static IFilmService _concentrationService;
     public AddFilmViewModel(IFilmService concentrationService) =>
       _concentrationService = concentrationService ?? throw new ArgumentNullException(nameof(concentrationService));
+    #endregion
     private void NotificationFileSaved()
     {
       System.Windows.MessageBox.Show(
@@ -52,6 +53,7 @@ namespace FilmsDataBase.ViewModels
     public DateTime Year { get => _year; set => Set(ref _year, value); }
     private string _oldTitle;
     public string OldTitle { get => _oldTitle; set => Set(ref _oldTitle, value); }
+    public int id;
     #endregion
 
     #region Commands
@@ -70,11 +72,12 @@ namespace FilmsDataBase.ViewModels
     public ICommand SaveDataCommand { get; }
     private void OnSaveDataCommandExecuted(object p)
     {
-      if (_concentrationService.IsEmpty() || !_concentrationService.Exist(OldTitle))
+      if (_concentrationService.IsEmpty() || !_concentrationService.Exist(id))
         _concentrationService.SetData(Title, Description, Icon, Trailer, Year);
       else
-        _concentrationService.UpdataDataBase(OldTitle, Title, Description, Icon, Trailer, Year);
+        _concentrationService.UpdataDataBase(id, Title, Description, Icon, Trailer, Year);
       NotificationFileSaved();
+      DisplayRootRegistry.HidePresentation(this);
     }
     private bool CanSaveDataCommandExecute(object p) 
     {
