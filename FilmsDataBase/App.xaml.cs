@@ -27,6 +27,12 @@ namespace FilmsDataBase
       var mainWindowBuilder = new ContainerBuilder();
       mainWindowBuilder.RegisterType<FilmService>().As<IFilmService>();
       mainWindowBuilder.RegisterType<MainWindowViewModel>();
+
+      mainWindowBuilder.RegisterType<Repository>().As<IRepository>();
+      mainWindowBuilder.RegisterType<FilmService>();
+
+      mainWindowBuilder.RegisterType<FilmService>().As<IFilmService>();
+      mainWindowBuilder.RegisterType<AddFilmViewModel>();
       _mainWindowService = mainWindowBuilder.Build();
     }
 
@@ -34,6 +40,8 @@ namespace FilmsDataBase
     {
       RegisterTypes();
       _mainWindowService.Resolve<MainWindowViewModel>();
+      _mainWindowService.Resolve<FilmService>();
+      _mainWindowService.Resolve<AddFilmViewModel>();
     }
   }
 }

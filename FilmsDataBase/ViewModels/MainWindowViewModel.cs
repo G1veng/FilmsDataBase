@@ -17,23 +17,13 @@ namespace FilmsDataBase.ViewModels
 {
   public class MainWindowViewModel : ViewModel
   {
+    #region Autofac
+    private static IFilmService _concentrationService = null;
     public MainWindowViewModel(IFilmService concentrationService)
     {
       _concentrationService = concentrationService ?? throw new ArgumentNullException(nameof(concentrationService));
-
-      var filmServiceBuilder = new ContainerBuilder();
-      filmServiceBuilder.RegisterType<Repository>().As<IRepository>();
-      filmServiceBuilder.RegisterType<FilmService>();
-      _repositoryService = filmServiceBuilder.Build();
-
-      var addFilmWindowBuilder = new ContainerBuilder();
-      addFilmWindowBuilder.RegisterType<FilmService>().As<IFilmService>();
-      addFilmWindowBuilder.RegisterType<AddFilmViewModel>();
-      _addFilmWindowService = addFilmWindowBuilder.Build();
-
-      _repositoryService.Resolve<FilmService>();
-      _addFilmWindowService.Resolve<AddFilmViewModel>();
     }
+    #endregion
     private void NotificationFileUpdated()
     {
       System.Windows.MessageBox.Show(
@@ -44,11 +34,6 @@ namespace FilmsDataBase.ViewModels
         (MessageBoxResult)MessageBoxDefaultButton.Button1,
         System.Windows.MessageBoxOptions.DefaultDesktopOnly);
     }
-
-    private static IFilmService _concentrationService = null;
-
-    private static IContainer _addFilmWindowService = null;
-    private static IContainer _repositoryService = null;
 
     #region SelectedWindow
     private DisplayRootRegistry displayRootRegistry;
@@ -91,7 +76,7 @@ namespace FilmsDataBase.ViewModels
     }
     #endregion
 
-    #region OpenInnerWindowComman 
+    #region OpenInnerWindowCommand
     public ICommand OpenInnerWindowCommand { get; }
     private bool CanOpenInnerWindowCommandExecute(object p) => !displayRootRegistry.CheckForExistingWindows(addFilmViewModel);
     private void OnOpenInnerWindowCommandExecuted(object p)

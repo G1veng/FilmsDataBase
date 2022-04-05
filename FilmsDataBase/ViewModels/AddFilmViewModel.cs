@@ -125,9 +125,6 @@ namespace FilmsDataBase.ViewModels
     #endregion
 
     #endregion
-
-    
-
     public AddFilmViewModel()
     {
       #region Commands
