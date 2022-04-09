@@ -19,6 +19,7 @@
         <KeyBinding Command="{Binding EditFilmCommand}" Gesture="Ctrl + E"/>
         <KeyBinding Command="{Binding InformationAboutFilmCommand}" Gesture="Ctrl + I"/>
         <KeyBinding Command="{Binding OpenGreetingWindowCommand}" Gesture="Ctrl + G" CommandParameter="true"/>
+        <KeyBinding Command="{Binding SaveToFileCommand}" Gesture="Ctrl + S"/>
     </Window.InputBindings>
     <Grid>
         <Grid.Resources>
@@ -51,6 +52,7 @@
                 <MenuItem Header="Exit" Command="{Binding CloseApplicationCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
                 <MenuItem Header="Refresh" Command="{Binding RefreshDataBaseCommand}"/>
                 <MenuItem Header="Information about film" Command="{Binding InformationAboutFilmCommand}"/>
+                <MenuItem Header="Save to file" Command="{Binding SaveToFileCommand}"/>
             </MenuItem>
             <MenuItem Header="Information" Command="{Binding OpenGreetingWindowCommand}" CommandParameter="true"/>
         </Menu>

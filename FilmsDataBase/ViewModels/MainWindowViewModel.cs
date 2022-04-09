@@ -196,8 +196,17 @@ namespace FilmsDataBase.ViewModels
     }
     #endregion
 
+    #region SaveToFileCommand
+    public ICommand SaveToFileCommand { get; }
+    private bool CanSaveToFileCommandExecute(object p) => !_concentrationService.IsEmpty();
+    private void OnSaveToFileCommandExecuted(object p)
+    {
+      _concentrationService.SaveToFile();
+    }
     #endregion
-    
+
+    #endregion
+
     public MainWindowViewModel()
     {
       Films = new ObservableCollection<Film>();
@@ -220,6 +229,7 @@ namespace FilmsDataBase.ViewModels
       EditFilmCommand = new LambdaCommand(OnEditFilmCommandExecuted, CanEditFilmCommandExecute);
       InformationAboutFilmCommand = new LambdaCommand(OnInformationAboutFilmCommandExecuted, CanInformationAboutFilmCommandExecute);
       OpenGreetingWindowCommand = new LambdaCommand(OnOpenGreetingWindowCommandExxecuted, CanOpenGreetingWindowCommandExecute);
+      SaveToFileCommand = new LambdaCommand(OnSaveToFileCommandExecuted, CanSaveToFileCommandExecute);
       #endregion
     }
   }

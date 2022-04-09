@@ -7,7 +7,7 @@ using FilmsDataBase.Infrastructure;
 
 namespace FilmsDataBase.Data
 {
-  internal class Repository : IRepository
+  public class Repository : IRepository
   {
     public async Task UpdateBase(RawFilm film, int id)
     {

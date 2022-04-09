@@ -20,6 +20,7 @@ namespace FilmsDataBase.ViewModels
     }
     #endregion
 
+    #region Commands
     #region CloseApplicationCommand
     public ICommand CloseApplicationCommand { get; }
     private void OnCloseApplicationCommandExecuted(object p)
@@ -30,6 +31,7 @@ namespace FilmsDataBase.ViewModels
       DisplayRootRegistry.HidePresentation(this);
     }
     private bool CanCloseApplicationCommandExecute(object p) => true;
+    #endregion
     #endregion
 
     public GreetingsWindowViewModel()

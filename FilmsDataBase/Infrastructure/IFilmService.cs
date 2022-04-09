@@ -11,5 +11,6 @@ namespace FilmsDataBase.Infrastructure
     void UpdataDataBase(int id, string newTitle, string newDescription, string newIcon, string newTrailer, System.DateTime newYear);
     bool Exist(int id);
     bool IsEmpty();
+    bool SaveToFile();
   }
 }

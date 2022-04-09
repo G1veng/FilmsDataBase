@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Forms;
 using System;
 using FilmsDataBase.Infrastructure;
+using System.IO;
 
 namespace FilmsDataBase.ViewModels
 {
@@ -72,10 +73,14 @@ namespace FilmsDataBase.ViewModels
     public ICommand SaveDataCommand { get; }
     private void OnSaveDataCommandExecuted(object p)
     {
+      File.Copy(Icon, Path.Combine("D:\\4 семестр\\РПС\\FilmsDataBase\\FilmsDataBase\\Saved\\Images\\" + Title + ".jpg"));
+      File.Copy(Trailer, Path.Combine("D:\\4 семестр\\РПС\\FilmsDataBase\\FilmsDataBase\\Saved\\Trailer\\" + Title + ".mp4"));
       if (_concentrationService.IsEmpty() || !_concentrationService.Exist(id))
-        _concentrationService.SetData(Title, Description, Icon, Trailer, Year);
+        _concentrationService.SetData(Title, Description, "D:\\4 семестр\\РПС\\FilmsDataBase\\FilmsDataBase\\Saved\\Images\\" + Title + ".jpg",
+          "D:\\4 семестр\\РПС\\FilmsDataBase\\FilmsDataBase\\Saved\\Trailer\\" + Title + ".mp4", Year);
       else
-        _concentrationService.UpdataDataBase(id, Title, Description, Icon, Trailer, Year);
+        _concentrationService.UpdataDataBase(id, Title, Description, "D:\\4 семестр\\РПС\\FilmsDataBase\\FilmsDataBase\\Saved\\Images\\" + Title + ".jpg",
+          "D:\\4 семестр\\РПС\\FilmsDataBase\\FilmsDataBase\\Saved\\Trailer\\" + Title + ".mp4", Year);
       NotificationFileSaved();
       DisplayRootRegistry.HidePresentation(this);
     }

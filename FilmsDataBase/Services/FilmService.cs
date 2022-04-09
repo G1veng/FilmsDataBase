@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using FilmsDataBase.Data;
 using FilmsDataBase.Infrastructure;
 using System;
+using System.Windows.Forms;
+using System.IO;
 
 namespace FilmsDataBase.Services
 {
@@ -47,5 +49,35 @@ namespace FilmsDataBase.Services
       _concentrationService.UpdateBase(new RawFilm() { Title = newTitle, Description = newDescription, Icon = newIcon, Trailer = newTrailer, Year = newYear }, id).Wait();
     public bool Exist(int id) => _concentrationService.Exist(id);
     public bool IsEmpty() => _concentrationService.GetCountOfRows() == 0;
+    public bool SaveToFile()
+    {
+      var films = GetData();
+      SaveFileDialog saveFileDialog = new SaveFileDialog();
+      saveFileDialog.InitialDirectory = "SavedFiles";
+      saveFileDialog.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
+      if (saveFileDialog.ShowDialog() == DialogResult.OK)
+      {
+        try
+        {
+          var filePath = saveFileDialog.FileName;
+          StreamWriter file = new StreamWriter(filePath, false);
+          foreach(var film in films)
+          {
+            file.WriteLine(film.Title);
+            file.WriteLine(film.Description);
+            file.WriteLine(film.Icon);
+            file.WriteLine(film.Trailer);
+            file.WriteLine(film.Year);
+            file.WriteLine("----------------------------");
+          }
+          file.Close();
+        }
+        catch
+        {
+          return false;
+        }
+      }
+      return true;
+    }
   }
 }
