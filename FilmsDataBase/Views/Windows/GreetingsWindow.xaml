@@ -6,7 +6,7 @@
         xmlns:vm="clr-namespace:FilmsDataBase.ViewModels"
         xmlns:local="clr-namespace:FilmsDataBase.Views.Windows"
         mc:Ignorable="d"
-        Title="GreetingsWindow" Height="250" Width="450">
+        Title="🐯👋🏼🐵" Height="250" Width="450" Icon="D:\Downloads\BlueSmile (1).ico">
     <Window.DataContext>
         <vm:GreetingsWindowViewModel/>
     </Window.DataContext>
@@ -33,6 +33,6 @@ of saving a list of existing entities to a file." TextWrapping="Wrap"
                   IsChecked="{Binding IsChecked, Mode=TwoWay}"/>
         <TextBlock Grid.Row="1" Margin="80, 19, 0, 10" Text="Check if you don't want to see this again"/>
         <Button Grid.Row="1" Height="25" Width="35" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0, 0, 50, 0" Content="OK"
-                Command="{Binding CloseApplicationCommand}"/>
+                Command="{Binding CloseApplicationCommand}" Background="#FFAAD3F0"/>
     </Grid>
 </Window>

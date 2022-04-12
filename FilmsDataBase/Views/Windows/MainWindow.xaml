@@ -3,7 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="clr-namespace:FilmsDataBase.ViewModels"
         Title="🐯📺🐵" Height="450" Width="645"
-        Background="#9370DB"
         Icon="D:\4 семестр\РПС\FilmsDataBase\Violet-smile.ico"
         MinHeight="450"
         MaxHeight="450"
@@ -11,6 +10,23 @@
     <Window.DataContext>
         <vm:MainWindowViewModel/>
     </Window.DataContext>
+    <Window.Resources>
+        <Style x:Key="{x:Type ScrollBar}" TargetType="{x:Type ScrollBar}">
+            <Setter Property="Background" Value="#9370DB"/>
+            <Setter Property="ScrollViewer.BorderBrush" Value="#9370DB"/>
+            <Setter Property="ScrollViewer.Foreground" Value="#9370DB"/>
+        </Style>
+        <Style TargetType="{x:Type Thumb}">
+            <Setter Property="OverridesDefaultStyle" Value="True"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Thumb}">
+                        <Border CornerRadius="2" Background="#9370DB" BorderBrush="#9370DB" BorderThickness="1"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
     <Window.InputBindings>
         <KeyBinding Command="{Binding RefreshDataBaseCommand}" Gesture="F5"/>
         <KeyBinding Command="{Binding OpenInnerWindowCommand}" Gesture="Ctrl + O"/>
@@ -44,7 +60,7 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Menu Grid.Row="0" Background="#9370DB">
+        <Menu Grid.Row="0" Background="White">
             <MenuItem Header="File">
                 <MenuItem Header="Add film" Command="{Binding OpenInnerWindowCommand}"/>
                 <MenuItem Header="Delete film" Command="{Binding DeleteDataFromDataBaseCommand}"/>
@@ -57,8 +73,7 @@
             <MenuItem Header="Information" Command="{Binding OpenGreetingWindowCommand}" CommandParameter="true"/>
         </Menu>
         <DataGrid ItemsSource="{Binding Films, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Grid.ColumnSpan="3" Grid.RowSpan="3" Margin="0, 20, 0, 0" AutoGenerateColumns="False"
-                  CanUserAddRows="False" CanUserReorderColumns="False" CanUserDeleteRows="False" SelectedItem="{Binding WhichFilm, Mode=TwoWay}" IsReadOnly="True"
-                  Background="#cbb6ee">
+                  CanUserAddRows="False" CanUserReorderColumns="False" CanUserDeleteRows="False" SelectedItem="{Binding WhichFilm, Mode=TwoWay}" IsReadOnly="True">
             <DataGrid.Columns>
                 <DataGridTextColumn Header = "Ttile" Width="100" Binding="{Binding Title}" />
                 <DataGridTextColumn Header = "Description" Width="140" Binding="{Binding Description}"/>
@@ -66,6 +81,24 @@
                 <DataGridTemplateColumn Header = "Trailer" Width="auto" CellTemplate="{StaticResource Trailer}"/>
                 <DataGridTextColumn Header = "Year" Width="auto" Binding="{Binding Year}"/>
             </DataGrid.Columns>
+            <DataGrid.RowStyle>
+                <Style TargetType="{x:Type DataGridRow}">
+                    <Style.Triggers>
+                        <Trigger Property="IsSelected" Value="True" >
+                            <Setter Property="Background" Value="#9370DB" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.RowStyle>
+            <DataGrid.Resources>
+                <Style TargetType="{x:Type DataGridCell}">
+                    <Style.Triggers>
+                        <Trigger Property="DataGridCell.IsSelected" Value="True">
+                            <Setter Property="Background" Value="#9370DB" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.Resources>
         </DataGrid>
     </Grid>
 </Window>

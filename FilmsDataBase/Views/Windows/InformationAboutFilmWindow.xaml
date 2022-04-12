@@ -6,13 +6,22 @@
         xmlns:local="clr-namespace:FilmsDataBase.Views.Windows"
         xmlns:vm="clr-namespace:FilmsDataBase.ViewModels"
         mc:Ignorable="d"
-        Title="InformationAboutFilmWindow" Height="450" Width="800">
+        Title="🐯📚🐵" Height="450" Width="800" Icon="D:\4 семестр\РПС\FilmsDataBase\BlackSmile.jpg">
     <Window.DataContext>
         <vm:InformationAboutFilmWindowViewModel/>
     </Window.DataContext>
     <Window.InputBindings>
         <KeyBinding Command="{Binding CloseApplicationCommand}" Gesture="ESC"/>
     </Window.InputBindings>
+    <Window.Resources>
+        <Style x:Key="RedTextBoxStyle" TargetType="{x:Type TextBox}">
+            <Style.Triggers>
+                <Trigger Property="IsFocused" Value="true">
+                    <Setter Property="Background" Value="#D3D3D3" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -24,11 +33,14 @@
             <RowDefinition/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <TextBlock Text = "{Binding Title}" TextWrapping="Wrap" Grid.Column="0" Grid.Row="0" Margin="10, 60, 10, 40" TextAlignment="Center"/>
-        <TextBlock Text = "{Binding Year}" Margin="0, 100, 0, 0" HorizontalAlignment="Center" Grid.Row="0"/>
-        <TextBlock Text = "{Binding Description}" TextWrapping="Wrap" Grid.Column="1" Grid.Row="0" Margin="10, 20, 10, 10" HorizontalAlignment="Center" TextAlignment="Justify"/>
-        <Image Source = "{Binding Icon}" Margin="10" Grid.Column="3" Grid.RowSpan="3"/>
+        <TextBox Text = "{Binding Title}" TextWrapping="Wrap" Grid.Column="2" Grid.Row="0" Margin="20, 20, 20, 20" TextAlignment="Center" VerticalAlignment="Top" IsReadOnly="True" BorderBrush="#D3D3D3" Style="{StaticResource RedTextBoxStyle}"/>
+        <TextBox Text = "{Binding Year}" Margin="40, 105, 0, 15" HorizontalAlignment="Left" Grid.Row="0" IsReadOnly="True" BorderBrush="#D3D3D3" Style="{StaticResource RedTextBoxStyle}"/>
+        <TextBox Margin="40, 85, 0, 35" HorizontalAlignment="Left" Grid.Row="0" IsReadOnly="True" BorderBrush="#D3D3D3" Text="Year:" FontSize="10" BorderThickness="0"/>
+        <TextBox Text = "{Binding Description}" TextWrapping="Wrap" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0" Margin="40, 20, 10, 60" HorizontalAlignment="Left" TextAlignment="Justify"
+                 IsReadOnly="True" Width="445" BorderBrush="#D3D3D3" Style="{StaticResource RedTextBoxStyle}"/>
+        <TextBox Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0" Margin="40, 0, 10, 120" HorizontalAlignment="Left" TextAlignment="Justify" BorderBrush="#D3D3D3"
+                 FontSize="10" Text="Description:" BorderThickness="0"/>
+        <Image Source = "{Binding Icon}" Margin="10" Grid.Column="3" Grid.RowSpan="3" Height="360" Width="220"/>
         <MediaElement x:Name="Video" Source = "{Binding Trailer}" Grid.Row="1" Grid.ColumnSpan="2" LoadedBehavior="Manual" Margin="0, 0, 0, 25" Grid.RowSpan="2" MouseLeftButtonDown="Video_MouseLeftButtonDown"/>
-        
     </Grid>
 </Window>
