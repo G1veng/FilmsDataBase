@@ -73,7 +73,8 @@
             <MenuItem Header="Information" Command="{Binding OpenGreetingWindowCommand}" CommandParameter="true"/>
         </Menu>
         <DataGrid ItemsSource="{Binding Films, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Grid.ColumnSpan="3" Grid.RowSpan="3" Margin="0, 20, 0, 0" AutoGenerateColumns="False"
-                  CanUserAddRows="False" CanUserReorderColumns="False" CanUserDeleteRows="False" SelectedItem="{Binding WhichFilm, Mode=TwoWay}" IsReadOnly="True">
+                  CanUserAddRows="False" CanUserReorderColumns="False" CanUserDeleteRows="False" SelectedItem="{Binding WhichFilm, Mode=TwoWay}" IsReadOnly="True"
+                  VirtualizingPanel.ScrollUnit="Pixel">
             <DataGrid.Columns>
                 <DataGridTextColumn Header = "Ttile" Width="100" Binding="{Binding Title}" />
                 <DataGridTextColumn Header = "Description" Width="140" Binding="{Binding Description}"/>
