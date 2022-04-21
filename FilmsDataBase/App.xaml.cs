@@ -28,7 +28,8 @@ namespace FilmsDataBase
       mainWindowBuilder.RegisterType<FilmService>().As<IFilmService>();
       mainWindowBuilder.RegisterType<MainWindowViewModel>();
 
-      mainWindowBuilder.RegisterType<Repository>().As<IRepository>();
+      //mainWindowBuilder.RegisterType<Repository>().As<IRepository>();
+      mainWindowBuilder.RegisterType<ApiRepository>().As<IRepository>();
       mainWindowBuilder.RegisterType<FilmService>();
 
       mainWindowBuilder.RegisterType<FilmService>().As<IFilmService>();

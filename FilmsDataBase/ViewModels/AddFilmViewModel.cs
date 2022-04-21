@@ -31,7 +31,8 @@ namespace FilmsDataBase.ViewModels
       System.Windows.MessageBox.Show(message, caption, button, icon);
 
     #region Properties
-
+    private string pathToSaveIcons = "D:\\4 семестр\\РПС\\Base\\Films\\Icons\\";
+    private string pathToSaveTrailers = "D:\\4 семестр\\РПС\\Base\\Films\\Trailers\\";
     private DisplayRootRegistry _displayRootRegistry;
     public DisplayRootRegistry DisplayRootRegistry
     {
@@ -50,7 +51,7 @@ namespace FilmsDataBase.ViewModels
     private string _trailer;
     public string Trailer { get => _trailer; set => Set(ref _trailer, value); }
 
-    private DateTime _year;
+    private DateTime _year = new DateTime().ToLocalTime();
     public DateTime Year { get => _year; set => Set(ref _year, value); }
     private string _oldTitle;
     public string OldTitle { get => _oldTitle; set => Set(ref _oldTitle, value); }
@@ -73,14 +74,14 @@ namespace FilmsDataBase.ViewModels
     public ICommand SaveDataCommand { get; }
     private void OnSaveDataCommandExecuted(object p)
     {
-      File.Copy(Icon, Path.Combine("D:\\4 семестр\\РПС\\FilmsDataBase\\FilmsDataBase\\Saved\\Images\\" + Title + ".jpg"));
-      File.Copy(Trailer, Path.Combine("D:\\4 семестр\\РПС\\FilmsDataBase\\FilmsDataBase\\Saved\\Trailer\\" + Title + ".mp4"));
+      if(Icon.EndsWith(".jpg"))
+        File.Copy(Icon, Path.Combine(pathToSaveIcons + Title + ".jpg"));
+      if (Trailer.EndsWith(".mp4"))
+        File.Copy(Trailer, Path.Combine(pathToSaveTrailers + Title + ".mp4"));
       if (_concentrationService.IsEmpty() || !_concentrationService.Exist(id))
-        _concentrationService.SetData(Title, Description, "D:\\4 семестр\\РПС\\FilmsDataBase\\FilmsDataBase\\Saved\\Images\\" + Title + ".jpg",
-          "D:\\4 семестр\\РПС\\FilmsDataBase\\FilmsDataBase\\Saved\\Trailer\\" + Title + ".mp4", Year);
+        _concentrationService.SetData(Title, Description, Title + ".jpg", Title + ".mp4", Year);
       else
-        _concentrationService.UpdataDataBase(id, Title, Description, "D:\\4 семестр\\РПС\\FilmsDataBase\\FilmsDataBase\\Saved\\Images\\" + Title + ".jpg",
-          "D:\\4 семестр\\РПС\\FilmsDataBase\\FilmsDataBase\\Saved\\Trailer\\" + Title + ".mp4", Year);
+        _concentrationService.UpdataDataBase(id, Title, Description, Title + ".jpg", Title + ".mp4", Year);
       NotificationFileSaved();
       DisplayRootRegistry.HidePresentation(this);
     }
@@ -90,6 +91,7 @@ namespace FilmsDataBase.ViewModels
       if (Description == string.Empty || Description == null) return false;
       if (Icon == string.Empty || Icon == null) return false;
       if (Trailer == string.Empty || Trailer == null) return false;
+      if(Year <= new DateTime(1927, 10, 06) ) return false;
       return true;
     }
     #endregion

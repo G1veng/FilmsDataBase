@@ -1,40 +1,56 @@
 ﻿using FIlmsDataBaseWEBApiApplication.Infrastructure;
 using System.Collections.Generic;
+using FilmsDataBase.Infrastructure;
+using FilmsDataBase.Models;
+using System.Threading.Tasks;
 
 namespace FIlmsDataBaseWEBApiApplication.Data
 {
-  public class EFFilmRepository : IEFFilmREpository
+  public class EFFilmRepository : IRepository
   {
     private EFFilmsDbContext _context;
     public EFFilmRepository(EFFilmsDbContext context) => _context = context;
-    public IEnumerable<Film> Get() => _context.FilmTable;
-    public Film Get(int id) => _context.FilmTable.Find(id);
-
+    public bool Exist(int id) => new bool();
+    public int GetFirstId() => new int();
+    public int GetCountOfRows() => new int();
+    public List<Film> GetAll() 
+    { 
+      List<Film> list = new List<Film>();
+      var films = _context.FilmTable;
+      foreach(var film in films) 
+        list.Add(film);
+      return list;
+    }
+    public Film FindInBase(Film useLess,int id) => _context.FilmTable.Find(id);
     public void Create(Film item) 
     {
       _context.Add(item);
       _context.SaveChanges();
     }
-    public void Update(Film item) 
+    public async Task AddToBase(Film item) 
     {
-      Film currentItem = Get(item.Id);
+      await _context.AddAsync(item);
+      _context.SaveChanges();
+    }
+    public async Task UpdateBase(Film item, int id)
+    {
+      Film currentItem = FindInBase(new Film(), item.Id);
       currentItem.Title = item.Title;
       currentItem.Description = item.Description;
       currentItem.Year = item.Year;
       currentItem.Trailer = item.Trailer;
       currentItem.Icon = item.Icon;
       _context.FilmTable.Update(currentItem);
-      _context.SaveChanges();
+      await _context.SaveChangesAsync();
     }
-    public Film Delete(int id) 
+    public async Task DeleteFromBase(int id) 
     {
-      Film film = Get(id);
+      Film film = FindInBase(new Film(), id);
       if (film != null)
       {
         _context.FilmTable.Remove(film);
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
       }
-      return film;
     }
   }
 }

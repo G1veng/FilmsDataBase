@@ -29,7 +29,7 @@ namespace FilmsDataBase.Data
     }
     public async Task AddToBase(RawFilm film)
     {
-      string sqlExpression = "INSERT INTO Films (Title, Description, Icon, Trailer, Year) VALUES (@Title, @Description, @PathToTrailer, @PathToImage, @Year)";
+      string sqlExpression = "INSERT INTO Films (Title, Description, Icon, Trailer, Year) VALUES (@Title, @Description, @PathToImage, @PathToTrailer, @Year)";
       SqliteConnection connection = new SqliteConnection(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
       connection.Open();
       SqliteCommand command = new SqliteCommand(sqlExpression, connection);

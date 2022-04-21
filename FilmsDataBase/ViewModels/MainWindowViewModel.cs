@@ -174,14 +174,17 @@ namespace FilmsDataBase.ViewModels
 
     #region RefreshDataBaseCommand
     public ICommand RefreshDataBaseCommand { get; }
-    private bool CanRefreshDataBaseCommandExecute(object p) => !_concentrationService.IsEmpty();
+    private bool CanRefreshDataBaseCommandExecute(object p) => true;
     private void OnRefreshDataBaseCommandExecuted(object p)
     {
       Films.Clear();
-      List<Film> someFilms = _concentrationService.GetData();
-      for (int i = 0; i < someFilms.Count; i++)
+      if (!_concentrationService.IsEmpty())
       {
-        Films.Add((Film)someFilms[i].Clone());
+        List<Film> someFilms = _concentrationService.GetData();
+        for (int i = 0; i < someFilms.Count; i++)
+        {
+          Films.Add((Film)someFilms[i].Clone());
+        }
       }
     }
     #endregion

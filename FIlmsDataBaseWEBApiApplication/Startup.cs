@@ -13,6 +13,11 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using FIlmsDataBaseWEBApiApplication.Infrastructure;
 using FIlmsDataBaseWEBApiApplication.Data;
+using Microsoft.AspNetCore.Routing;
+using System.Reflection.Metadata;
+using Microsoft.AspNetCore.Http;
+using System.Web;
+using FilmsDataBase.Infrastructure;
 
 namespace FIlmsDataBaseWEBApiApplication
 {
@@ -21,6 +26,7 @@ namespace FIlmsDataBaseWEBApiApplication
     public Startup(IConfiguration configuration)
     {
       Configuration = configuration;
+      
     }
 
     public IConfiguration Configuration { get; }
@@ -28,9 +34,13 @@ namespace FIlmsDataBaseWEBApiApplication
     // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices(IServiceCollection services)
     {
+      
+      //services.AddMvc();
+      services.AddRazorPages();
       services.AddControllers();
-      services.AddTransient<IEFFilmREpository, EFFilmRepository>();
+      services.AddTransient<IRepository, EFFilmRepository>();
       services.AddDbContext<EFFilmsDbContext>(options => options.UseSqlServer(Configuration["ConnectionStrings:DefaultConnection"]));
+      //services.AddTransient<IRepository, WebApiRepository>();
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -41,7 +51,7 @@ namespace FIlmsDataBaseWEBApiApplication
       {
         app.UseDeveloperExceptionPage();
       }
-
+      
       app.UseHttpsRedirection();
 
       app.UseRouting();
@@ -51,6 +61,7 @@ namespace FIlmsDataBaseWEBApiApplication
       app.UseEndpoints(endpoints =>
       {
         endpoints.MapControllers();
+        endpoints.MapRazorPages();
       });
     }
   }

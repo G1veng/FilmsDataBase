@@ -4,74 +4,114 @@
     <meta charset="utf-8" />
     <title>Зая</title>
     <script src="jquery-3.6.0.min.js"></script>
-    <script src="require.js"></script>
     <link rel="stylesheet" href="StyleSheet.css" />
 </head>
 <body>
     <div>
-
-        <textarea type="text" id="identificationNumber" class="identificationNumber"></textarea>
-        <textarea type="text" id="title" class="filmsToSaveData"></textarea>
-        <textarea type="text" id="description" class="filmsToSaveData"></textarea>
-        <textarea type="text" id="trailer" class="trailer"></textarea>
-        <textarea type="text" id="icon" class="icon"></textarea>
-        <textarea type="datetime" id="year" class="filmsToSaveData">2012-04-30T02:20:22.20</textarea>
-        <button id="saveFilm">Save film</button>
-        <button id="deleteFilm">Delete film</button>
-        <button id="editFilm">Edit film</button>
-        <input type="file" id="logo" onchange="GetUrlOfImage()">
-        <img src="BlueSmile.jpg" alt="Blue smile" width="200" height="200" id="myImage" />
+        <form method="post" action="Home" enctype="multipart/form-data">
+            <input type="text" name="title" placeholder="Title..."/>
+            <input type="file" name="icon" placeholder="Icon..."/>
+            <input type="file" name="trailer" placeholder="Trailer..." />
+            <input type="datetime" name="year" placeholder="Year..." />
+            <input type="text" name="description" placeholder="Description..."/>
+            <input type="submit" />
+        </form>
+        <img src="Files/Images/BlueSmile.jpg" height="100" width="150"/>
+        <video height="200" width="350" controls>
+            <source src="Files/Media/SPIDER-MAN_ NO WAY HOME - Official Trailer (HD).mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'/>
+        </video>
+        <button id="saveFilm">Sent</button>
     </div>
     <div class="films" id="films">
-
+        <img />
     </div>
     <script type="text/javascript" lang="en">
         $(document).ready(function () {
             GetAllFilms();
-            $("#saveFilm").click(function () {
-                AddFilm();
-            });
-            $("#deleteFilm").click(function () {
-                DeleteFilm();
-            });
-            $("#editFilm").click(function () {
-                EditFilm();
-            });
-            
+            console.log("Came");
         });
+        async function postFormDataAsJson({ url, formData }) {
+            const plainFormData = Object.fromEntries(formData.entries());
+            const formDataJsonString = JSON.stringify(plainFormData);
+
+            const fetchOptions = {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Accept: "application/json",
+                },
+                body: formDataJsonString,
+            };
+
+            const response = await fetch(url, fetchOptions);
+
+            if (!response.ok) {
+                const errorMessage = await response.text();
+                throw new Error(errorMessage);
+            }
+
+            return response.json();
+        }
+        function getUserChoice() {
+            var user_sol = document.getElementById("sol").value;
+            console.log(user_sol);
+        }
+        async function handleFormSubmit(event) {
+            event.preventDefault();
+
+            const form = event.currentTarget;
+            const url = form.action;
+
+            try {
+                const formData = new FormData(form);
+                const responseData = await postFormDataAsJson({ url, formData });
+
+                console.log({ responseData });
+            } catch (error) {
+                console.error(error);
+            }
+        }
+        function SendAll() {
+            console.log(Collect());
+
+            $.ajax({
+                url: 'home',
+                type: 'POST',
+                data: JSON.stringify(Collect()),
+                contentType: "application/json;charset=utf-8",
+            });
+        }
+        function Collect() {
+            var book = {
+                title: GetTitle(),
+                description: GetDescription(),
+                //icon: document.getElementById('icon').value,
+                icon: document.getElementById('icon').value,
+                trailer: GetTrailer(),
+                year: GetYear()
+            }
+            return book;
+        }
         function GetAllFilms() {
             $("#films").empty();
             $.getJSON({
                 url: "film",
                 type: 'GET',
-                dataType: 'json',
+                dataType: 'JSON',
                 success: function (data) {
-                    ShowFilms(data);
+                    ShowFilms(JSON.parse(data));
                 },
+                error: function (data) {
+                    console.log(data);
+                    ShowFilms(data);
+                }
             });
         }
-        function GetUrlOfImage() {
-            let image = document.getElementById('logo').files[0];
-            let reader = new FileReader();
-            reader.readAsDataURL(image);
-            let setImage = document.getElementById('myImage');
-            reader.onload = function () {
-                setImage.src = reader.result;
-                let imageLink = document.getElementById('icon');
-                imageLink.value = reader.result;
-                define(function (require) {
-                    var namedModule = require('fs');
-                    namedModule.copyFile(document.getElementById('logo').value, 'D:\\4 семестр\\РПС\\FilmsDataBase\\FIlmsDataBaseWEBApiApplication\\wwwroot\\image.jpg', (err) => {
-                        if (err) throw err;
-                        console.log('source.txt was copied to destination.txt');
-                    });
-                });
-            }
-        }
         function ShowFilms(books) {
+            console.log("came two");
             $(books).each(function (index, book) {
                 var htmlString = "<label>Id: " + book.id + "</label><label>Title: "
-                    + book.title + "</label><label>Description: " + book.description + "</label><img=" + book.icon + "alt=" + book.icon + "/><label>Trailer: "
+                    + book.title + "</label><label>Description: " + book.description + "</label><img=" + book.icon + "/><label>Trailer: "
                     + book.trailer + "</label><br/><label>Year: " + book.year + "</label>";
                 $('.films').append(htmlString);
                 console.log(book);
@@ -82,19 +122,19 @@
                 return;
             console.log(WriteOffFilm());
             $.ajax({
-                url: 'film',
+                url: 'api/home',
                 type: 'POST',
                 data: JSON.stringify(WriteOffFilm()),
                 contentType: "application/json;charset=utf-8",
                 success: function (data) {
                     GetAllFilms();
                 },
-                
+
             });
         }
         function DeleteFilm() {
             $.ajax({
-                url: 'film/' + GetIdentificationNumber(),
+                url: 'home/' + GetIdentificationNumber(),
                 type: 'DELETE',
                 success: function (data) {
                     GetAllFilms();
@@ -107,7 +147,7 @@
         }
         function EditFilm() {
             $.ajax({
-                url: 'film/' + GetIdentificationNumber(),
+                url: 'home/' + GetIdentificationNumber(),
                 type: 'PUT',
                 data: JSON.stringify(WriteOffFilmWithId()),
                 contentType: "application/json;charset=utf-8",
@@ -137,7 +177,7 @@
         }
         function GetTrailer() {
             let iconArea = document.getElementById("icon");
-            return iconArea.value;
+            return iconArea;
         }
         function GetYear() {
             let yearArea = document.getElementById("year");
@@ -145,7 +185,7 @@
         }
         function GetIcon() {
             let iconArea = document.getElementById("icon");
-            return iconArea.value;
+            return iconArea;
         }
         function WriteOffFilm() {
             var book = {
@@ -157,7 +197,7 @@
             }
             return book;
         }
-        function WriteOffFilmWithId(){
+        function WriteOffFilmWithId() {
             var book = {
                 id: GetIdentificationNumber(),
                 title: GetTitle(),

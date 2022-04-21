@@ -10,6 +10,8 @@ namespace FilmsDataBase.Services
 {
   internal class FilmService : IFilmService
   {
+    private string pathToSaveIcons = "D:\\4 семестр\\РПС\\Base\\Films\\Icons\\";
+    private string pathToSaveTrailers = "D:\\4 семестр\\РПС\\Base\\Films\\Trailers\\";
     private List<Film> innerFilms;
     private static IRepository _concentrationService = null;
     public FilmService(IRepository concentrationService) =>
@@ -25,7 +27,7 @@ namespace FilmsDataBase.Services
       for (int i = _concentrationService.GetFirstId(); counter < _concentrationService.GetCountOfRows(); i++)
       {
         RawFilm film = new RawFilm();
-        if (!(_concentrationService.FindInBase(film, i).Title != null))
+        if (!(_concentrationService.FindInBase(film, i) != null))
         {
           continue;
         }
@@ -34,8 +36,8 @@ namespace FilmsDataBase.Services
           Id = i,
           Title = film.Title,
           Description = film.Description,
-          Icon = film.Icon,
-          Trailer = film.Trailer,
+          Icon = pathToSaveIcons + film.Icon,
+          Trailer = pathToSaveTrailers + film.Trailer,
           Year = film.Year,
         });
         counter++;
