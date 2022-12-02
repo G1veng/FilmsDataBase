@@ -1,0 +1,97 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Зая</title>
+    <script src="jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="StyleSheet.css" />
+</head>
+<body>
+    <div class="mainWrapper">
+        <div class="pageName">
+            <h2>Film base</h2>
+        </div>
+        <div class="films"></div>
+    </div>
+    <script type="text/javascript" lang="en">
+
+        $(document).ready(function () {
+            GetAllFilms();
+            localStorage.clear();
+        });
+
+        function ShowFilm(obj) {
+            var data = {
+                'numberOfFilm': obj.id
+            };
+            localStorage.setItem("film", JSON.stringify(data));
+            window.location = 'https://localhost:44333/film.html';
+        }
+
+        function GetAllFilms() {
+            $("#films").empty();
+            $.getJSON({
+                url: "film",
+                type: 'GET',
+                dataType: 'JSON',
+                success: function (data) {
+                    ShowFilms(data);
+                },
+                error: function (data) {
+                    ShowFilms(data);
+                }
+            });
+        }
+
+        function ShowFilms(books) {
+            let counter = 0;
+            let countOfRows = 0;
+            var htmlString = '<div class="rowOfFilms' + countOfRows + '" id="films" style="display: flex; justify-content: center;"></div>'
+            $('.films').append(htmlString);
+            console.log(books);
+            $(books).each(function (index,book) {
+                if (counter == 3) {
+                    countOfRows++;
+                    var htmlString = '<div class="rowOfFilms' + countOfRows + '" id="films" style="display: flex; justify-content: center;"></div>'
+                    $('.films').append(htmlString);
+                    counter = 0;
+                }
+                var htmlString = '<div id="link" class="link"><label class="title">'
+                    + book.title + '</label></br><a onclick="ShowFilm(this)" class="linkOnFilm" id=\"' + book.id + '\"><img class="imageOfFilm" src=' + '\"' + book.icon + '\"' + 'height=\"150\" width=\"100\"/></a></div></br>';
+                $('.rowOfFilms' + countOfRows).append(htmlString);
+                counter++;
+            });
+            if (counter == 3) {
+                countOfRows++;
+                var htmlString = '<div class="rowOfFilms' + countOfRows + '" id="films" style="display: flex; justify-content: center;"></div>'
+                $('.films').append(htmlString);
+                counter = 0;
+            }
+            var htmlString = '<a onclick="CreateFilm(this)" class="addFilm">+</a>';
+            $('.rowOfFilms' + countOfRows).append(htmlString);
+            ShowOneByOne(0);
+
+        }
+
+        function ShowOneByOne(i) {
+            items = document.getElementsByClassName("link");
+            let count = i;
+            setTimeout(function () {
+                while (count < items.length) {
+                    items[count].style.display = "inline-block";
+                    items[count].classList.add('slide-animation');
+                    count++;
+                    if (count < items.length) {
+                        ShowOneByOne(count);
+                    }
+                }
+            }, 300);
+        }
+
+        function CreateFilm() {
+            window.location = 'https://localhost:44333/addFilm.html';
+        }
+
+    </script>
+</body>
+</html>

@@ -13,18 +13,6 @@
     <Window.Resources>
         <Style x:Key="{x:Type ScrollBar}" TargetType="{x:Type ScrollBar}">
             <Setter Property="Background" Value="#9370DB"/>
-            <Setter Property="ScrollViewer.BorderBrush" Value="#9370DB"/>
-            <Setter Property="ScrollViewer.Foreground" Value="#9370DB"/>
-        </Style>
-        <Style TargetType="{x:Type Thumb}">
-            <Setter Property="OverridesDefaultStyle" Value="True"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type Thumb}">
-                        <Border CornerRadius="2" Background="#9370DB" BorderBrush="#9370DB" BorderThickness="1"/>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
         </Style>
     </Window.Resources>
     <Window.InputBindings>
@@ -60,6 +48,7 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
+       
         <Menu Grid.Row="0" Background="White">
             <MenuItem Header="File">
                 <MenuItem Header="Add film" Command="{Binding OpenInnerWindowCommand}"/>
@@ -91,6 +80,7 @@
                     </Style.Triggers>
                 </Style>
             </DataGrid.RowStyle>
+            
             <DataGrid.Resources>
                 <Style TargetType="{x:Type DataGridCell}">
                     <Style.Triggers>

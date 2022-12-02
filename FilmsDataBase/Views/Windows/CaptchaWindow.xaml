@@ -1,0 +1,27 @@
+﻿<Window x:Class="FilmsDataBase.Views.Windows.CaptchaWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:FilmsDataBase.Views.Windows"
+        xmlns:vm="clr-namespace:FilmsDataBase.ViewModels"
+        mc:Ignorable="d"
+        Title="Captcha" Height="120" Width="200"
+        Closing="Window_Closing">
+    <Window.DataContext>
+        <vm:CapthcaViewModel/>
+    </Window.DataContext>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="2*"></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        <Image Grid.Column="0" Grid.Row="0" Source="{Binding Path}"
+               Margin="0px, 5px, 0px, 0px"></Image>
+        <TextBox Grid.Row="1" Grid.Column="0" Height="20px" Width="80px" HorizontalAlignment="Center" Margin="0px, 0px, 0px, 0px" Text="{Binding Answer}"></TextBox>
+        <Button Grid.Row="1" Grid.Column="0" Height="20px" Width="40px" HorizontalAlignment="Right" Margin="0px, 0px, 10px, 0px" Content="OK"
+                Command="{Binding SubmitInputCommand}"></Button>
+        <Button Grid.Row="1" Grid.Column="0" Height="20px" Width="40px" HorizontalAlignment="Left" Margin="10px, 0px, 0px, 0px" Content="Cancel"
+                Command="{Binding TerminateApllicationCommand}"></Button>
+    </Grid>
+</Window>

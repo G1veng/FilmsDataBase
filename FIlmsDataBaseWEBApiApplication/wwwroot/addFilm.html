@@ -1,0 +1,95 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <script src="jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="StyleSheet.css" />
+    <title></title>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="form">
+            <form method="post" action="film" enctype="multipart/form-data" class="filmForm">
+                <input class="titleInput" id="textAreaTitle" type="text" name="title" placeholder="Title..." onkeypress="ReloadTitle(this)" />
+                <label for="iconInput" class="inputButton">Select image</label>
+                <input class="iconInput" id="iconInput" type="file" name="icon" placeholder="Icon..." />
+                <label for="trailerInput" class="inputButton">Select trailer</label>
+                <input class="trailerInput" id="trailerInput" type="file" name="trailer" placeholder="Trailer..." />
+                <input id="textAreaYear" class="yearInput" type="datetime" name="year" placeholder="Year..." onkeypress="ReloadYear()" />
+                <input id="textAreaDescription" class="descriptionInput" type="text" name="description" placeholder="Description..."
+                       onkeypress="ReloadDescription()" />
+                <input type="submit" class="submitInput" />
+            </form>
+        </div>
+        <div class="filmPreview">
+            <div class="titleIconYear">
+                <div class="titlePreview"></div>
+                <div class="iconPreview"></div>
+                <div class="yearPreview"></div>
+            </div>
+            <div class="trailerDescription">
+                <div class="trailerPreview"></div>
+                <div class="descriptionPreview"></div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" lang="en">
+        $(document).ready(function () {
+            DisplayImage();
+            DisplayTrailer();
+            localStorage.clear();
+        });
+
+        function ReloadTitle(object) {
+            $('.titlePreview').empty();
+            var text = object.value;
+            var htmlString = '<label class="previewTitle">' + text + '</label>';
+            $('.titlePreview').append(htmlString);
+        }
+
+        function ReloadYear() {
+            $('.yearPreview').empty();
+            var text = document.getElementById('textAreaYear').value;
+            var htmlString = '<label class="previewYear">' + text + '</label>';
+            $('.yearPreview').append(htmlString);
+        }
+
+        function ReloadDescription() {
+            $('.descriptionPreview').empty();
+            var text = document.getElementById('textAreaDescription').value;
+            var htmlString = '<label class="previewDescription">' + text + '</label>';
+            $('.descriptionPreview').append(htmlString);
+        }
+
+        function DisplayImage() {
+            var fileField = document.getElementById('iconInput');
+            fileField.addEventListener('change', function (event) {
+                for (var x = 0; x < event.target.files.length; x++) {
+                    var reader = new FileReader();
+                    reader.onload = function (event) {
+                        let source = event.target.result;
+                        $('.iconPreview').empty();
+                        $('.iconPreview').append('<img class="icon" src="' + source + '"/>')
+                    }
+                    reader.readAsDataURL(event.target.files[x]);
+                }
+            });
+        }
+
+        function DisplayTrailer() {
+            var fileField = document.getElementById('trailerInput');
+            fileField.addEventListener('change', function (event) {
+                for (var x = 0; x < event.target.files.length; x++) {
+                    var reader = new FileReader();
+                    reader.onload = function (event) {
+                        let source = event.target.result;
+                        $('.trailerPreview').empty();
+                        $('.trailerPreview').append('<video src="' + source + '" class="trailer" controls></video>');
+                    }
+                    reader.readAsDataURL(event.target.files[x]);
+                }
+            });
+        }
+    </script>
+</body>
+</html>

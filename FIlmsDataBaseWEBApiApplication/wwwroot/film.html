@@ -1,0 +1,83 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="StyleSheet.css" />
+</head>
+<body>
+    <div class="addWFilmrapper">
+        <div class="particularFilm">
+            <div class="title"></div>
+            <div class="description"></div>
+            <div class="trailer"></div>
+            <div class="icon"></div>
+            <div class="year"></div>
+        </div>
+        <div>
+            <button class="DeleteFilmButton" onclick="DeleteParticularFilm()">Delete</button>
+        </div>
+    </div>
+    <script type="text/javascript" lang="en">
+        let id;
+
+        $(document).ready(function () {
+            console.log('loaded');
+            var data = localStorage.getItem("film");
+            var identificationNumber = JSON.parse(data).numberOfFilm;
+            console.log(identificationNumber);
+            GetParticularFilm(identificationNumber);
+        });
+
+        function GetParticularFilm(index) {
+            $("#films").empty();
+            $.getJSON({
+                url: "film/" + index,
+                type: 'GET',
+                dataType: 'JSON',
+                success: function (data) {
+                    console.log(data);
+                    ShowFilm(data);
+                },
+                error: function (data) {
+                    console.log("Something gone wrong");
+                }
+            });
+        }
+
+        function DeleteParticularFilm() {
+            var data = localStorage.getItem("film");
+            var identificationNumber = JSON.parse(data).numberOfFilm;
+            console.log(identificationNumber);
+            $.ajax({
+                url: "film/" + identificationNumber,
+                type: 'DELETE',
+                contentType: "application/json",
+                success: function (data) {
+                    console.log("Success");
+                },
+                error: function (data) {
+                    console.log("Something gone wrong");
+                }
+            });
+            localStorage.clear();
+            window.location = 'https://localhost:44333/main.html';
+        }
+
+        function ShowFilm(book) {
+            var htmlString = '<label>' + book.title + '</label>';
+            $('.title').append(htmlString);
+            var htmlString = '<label>' + book.description + '</label>';
+            $('.description').append(htmlString);
+            var htmlString = '<video src="' + book.trailer +'" class="trailer" controls></video>';
+            $('.trailer').append(htmlString);
+            var htmlString = '<img src="' + book.icon + '" class="icon" />';
+            $('.icon').append(htmlString);
+            var htmlString = '<label>' + book.year + '</label>';
+            $('.year').append(htmlString);
+        }
+
+    </script>
+</body>
+</html>

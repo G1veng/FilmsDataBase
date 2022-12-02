@@ -1,76 +1,66 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using FilmsDataBase.Infrastructure;
-//httpclient
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json.Linq;
+using System.IO;
+using FIlmsDataBaseWEBApiApplication.Models;
+using FIlmsDataBaseWEBApiApplication.Infrastructure;
 namespace FIlmsDataBaseWEBApiApplication.Controllers
 {
   [ApiController]
   [Route("[controller]")]
   public class FilmController : ControllerBase
   {
-    IRepository EFFilmREpository;
-    public FilmController(IRepository eFFilmREpository) => EFFilmREpository = eFFilmREpository;
+    private readonly string _mainPage = "main.html";
+    private readonly string _iconPath = "wwwroot\\Files\\Images\\";
+    private readonly string _trailerPath = "wwwroot\\Files\\Media\\";
+    IEFFilmREpository EFFilmREpository;
+    public FilmController(IEFFilmREpository eFFilmREpository) => EFFilmREpository = eFFilmREpository;
     [HttpGet(Name = "GetAll")]
-    public string GetAll()
-    {
-      var films = EFFilmREpository.GetAll();
-      string JSON = string.Empty;
-      foreach (var film in films)
-      {
-        var json = JsonConvert.SerializeObject(new
-        {
-          id = film.Id,
-          title = film.Title,
-          description = film.Description,
-          icon = film.Icon,
-          traler = film.Trailer,
-          year = film.Year
-        });
-        JSON += json;
-        JSON += ", ";
-      }
-      return JSON;
-    }
+    public List<Film> GetAll() => EFFilmREpository.Get();
 
     [HttpGet("{id}")]
-    public string Get(int id)
-    {
-      Film film = EFFilmREpository.FindInBase(new Film(), id);
-      if(film == null)
-        return "We have not these film";
-      return JsonConvert.SerializeObject(new
-      {
-        id = film.Id,
-        title = film.Title,
-        description = film.Description,
-        icon = film.Icon,
-        traler = film.Trailer,
-        year = film.Year
-      });
-    }
+    public Film Get(int id) => EFFilmREpository.Get(id);
 
     [HttpPost]
-    public IActionResult Create(Film film) { 
-      EFFilmREpository.AddToBase(film);
-      return RedirectToRoute("GetAll");
+    public void Create([FromForm] FilmFromForm filmFromForm) {
+      Film film = new Film()
+      {
+        Title = filmFromForm.title,
+        Description = filmFromForm.description,
+        Icon = filmFromForm.icon.FileName,
+        Trailer = filmFromForm.trailer.FileName,
+        Year = filmFromForm.year,
+      };
+      filmFromForm.icon.CopyTo(new FileStream(_iconPath + filmFromForm.icon.FileName, FileMode.Create));
+      filmFromForm.trailer.CopyTo(new FileStream(_trailerPath + filmFromForm.trailer.FileName, FileMode.Create));
+      EFFilmREpository.Create(film);
+      Response.Redirect(_mainPage);
     }
 
     [HttpPut("{id}")]
-    public IActionResult Update(int id, [FromBody] Film updateFilm)
+    public void Update(int id,[FromForm] FilmFromForm filmFromForm)
     {
-      if(updateFilm == null || updateFilm.Id != id) return RedirectToRoute("GetAll");
-      var film = EFFilmREpository.FindInBase(new Film(), id);
-      if(film == null) return RedirectToRoute("GetAll");
-      EFFilmREpository.UpdateBase(updateFilm, new int());
-      return RedirectToRoute("GetAll");
+      var film = EFFilmREpository.Get(id);
+      if(film == null) Response.Redirect(_mainPage);
+      film.Title = filmFromForm.title;
+      film.Description = filmFromForm.description;
+      film.Year = filmFromForm.year;
+      film.Id = id;
+      EFFilmREpository.Update(film);
+      Response.Redirect(_mainPage);
     }
 
-    [HttpDelete("{id}")]
-    public IActionResult Delete(int id)
+    [HttpDelete("{id:int}")]
+    public void Delete(int id)
     {
-      if(EFFilmREpository.FindInBase(new Film(), id) == null) return RedirectToAction("GetAll");
-      var deletedFilm = EFFilmREpository.DeleteFromBase(id);
-      return RedirectToRoute("GetAll");
+      if (EFFilmREpository.Get(id) == null)
+      {
+        Response.Redirect(_mainPage);
+      }
+      EFFilmREpository.Delete(id);
+      Response.Redirect(_mainPage);
     }
   }
 }

@@ -214,6 +214,9 @@ namespace FilmsDataBase.ViewModels
     {
       Films = new ObservableCollection<Film>();
       displayRootRegistry = (System.Windows.Application.Current as App).displayRootRegistry;
+      AuthentificationViewModel authentificationViewModel = new AuthentificationViewModel();
+      authentificationViewModel.DisplayRootRegistry = displayRootRegistry;
+      displayRootRegistry.ShowDialogPresentation(authentificationViewModel);
       if (!_concentrationService.IsEmpty())
       {
         List<Film> someFilms = _concentrationService.GetData();

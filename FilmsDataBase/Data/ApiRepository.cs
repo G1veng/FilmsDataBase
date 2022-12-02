@@ -1,21 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using WebApplication1.Controllers;
 using FilmsDataBase.Infrastructure;
 using FilmsDataBase.Models;
-using FilmDataAccess;
 using Newtonsoft.Json;
 using System.Net.Http;
 using System.Net;
+using System.Configuration;
+using FilmsDataBase.ViewModels;
 
 namespace FilmsDataBase.Data
 {
   public class ApiRepository : IRepository
   {
-    public Task UpdateBase(RawFilm film, int id)
+    //private readonly string token = Properties.Settings.Default.token;
+    public async Task UpdateBase(RawFilm film, int id)
     {
       var formContent = new FormUrlEncodedContent(new[]
       {
@@ -25,18 +24,22 @@ namespace FilmsDataBase.Data
         new KeyValuePair<string, string>("icon", film.Icon),
         new KeyValuePair<string, string>("trailer", film.Trailer),
         new KeyValuePair<string, string>("year", film.Year.ToString())
-      });
+      }); ;
       HttpClient client = new HttpClient();
-      HttpResponseMessage response = client.PutAsync("https://localhost:44353/film/Update/" + id.ToString(), formContent).Result;
+      HttpResponseMessage response = await client.PutAsync(ConfigurationManager.ConnectionStrings["Host"].ConnectionString
+        + "/film/Update/" + id.ToString() + "?token=" + Properties.Settings.Default.token, formContent);
       if (response.StatusCode == HttpStatusCode.OK)
       {
         HttpContent responseContent = response.Content;
         var jsonString = responseContent.ReadAsStringAsync().Result;
-        if (jsonString == "Done") return Task.CompletedTask;
+        if (jsonString == "Done")
+        {
+          return;
+        }
       }
       throw new ArgumentNullException(id.ToString());
     }
-    public Task AddToBase(RawFilm film)
+    public async Task AddToBase(RawFilm film)
     {
       var formContent = new FormUrlEncodedContent(new[]
       {
@@ -47,24 +50,31 @@ namespace FilmsDataBase.Data
         new KeyValuePair<string, string>("year", film.Year.ToString())
       });
       HttpClient client = new HttpClient();
-      HttpResponseMessage response = client.PostAsync("https://localhost:44353/film/Create", formContent).Result;
+      HttpResponseMessage response = await client.PostAsync(ConfigurationManager.ConnectionStrings["Host"].ConnectionString
+        + "/film/Create" + "?token=" + Properties.Settings.Default.token, formContent);
       if (response.StatusCode == HttpStatusCode.OK)
       {
         HttpContent responseContent = response.Content;
-        var jsonString = responseContent.ReadAsStringAsync().Result;
-        if (jsonString == "Done") return Task.CompletedTask;
+        var jsonString = await responseContent.ReadAsStringAsync();
+        if (jsonString == "Done") { 
+          return; 
+        }
       }
       throw new AccessViolationException();
     }
-    public Task DeleteFromBase(int id)
+    public async Task DeleteFromBase(int id)
     {
       HttpClient client = new HttpClient();
-      HttpResponseMessage response = client.DeleteAsync("https://localhost:44353/film/delete/" + id.ToString()).Result;
+      HttpResponseMessage response = await client.DeleteAsync(ConfigurationManager.ConnectionStrings["Host"].ConnectionString
+        + "/film/delete/" + id.ToString() + "?token=" + Properties.Settings.Default.token);
       if (response.StatusCode == HttpStatusCode.OK)
       {
         HttpContent responseContent = response.Content;
         var jsonString = responseContent.ReadAsStringAsync().Result;
-        if (jsonString == "Done") return Task.CompletedTask;
+        if (jsonString == "Done")
+        {
+          return;
+        }
       }
       throw new ArgumentNullException(id.ToString());
     }
@@ -72,7 +82,8 @@ namespace FilmsDataBase.Data
     {
       string jsonString = string.Empty;
       HttpClient client = new HttpClient();
-      HttpResponseMessage response = client.GetAsync("https://localhost:44353/film/get/" + id.ToString()).Result;
+      HttpResponseMessage response = client.GetAsync(ConfigurationManager.ConnectionStrings["Host"].ConnectionString + "/film/get/" + id.ToString()
+        + "?token=" + Properties.Settings.Default.token).Result;
       if (response.StatusCode == HttpStatusCode.OK)
       {
         HttpContent responseContent = response.Content;
@@ -91,7 +102,8 @@ namespace FilmsDataBase.Data
     public bool Exist(int id)
     {
       HttpClient client = new HttpClient();
-      HttpResponseMessage response = client.GetAsync("https://localhost:44353/film/get/" + id.ToString()).Result;
+      HttpResponseMessage response = client.GetAsync(ConfigurationManager.ConnectionStrings["Host"].ConnectionString + "/film/get/" + id.ToString()
+        + "?token=" + Properties.Settings.Default.token).Result;
       if (response.StatusCode == HttpStatusCode.OK)
       {
         HttpContent responseContent = response.Content;
@@ -104,7 +116,8 @@ namespace FilmsDataBase.Data
     public int GetCountOfRows()
     {
       HttpClient client = new HttpClient();
-      HttpResponseMessage response = client.GetAsync("https://localhost:44353/film/getall").Result;
+      HttpResponseMessage response = client.GetAsync(ConfigurationManager.ConnectionStrings["Host"].ConnectionString + "/film/getall"
+        + "?token=" + Properties.Settings.Default.token).Result;
       if (response.StatusCode == HttpStatusCode.OK)
       {
         HttpContent responseContent = response.Content;
@@ -116,7 +129,8 @@ namespace FilmsDataBase.Data
     public int GetFirstId()
     {
       HttpClient client = new HttpClient();
-      HttpResponseMessage response = client.GetAsync("https://localhost:44353/film/getall").Result;
+      HttpResponseMessage response = client.GetAsync(ConfigurationManager.ConnectionStrings["Host"].ConnectionString + "/film/getall"
+        + "?token=" + Properties.Settings.Default.token).Result;
       if (response.StatusCode == HttpStatusCode.OK)
       {
         HttpContent responseContent = response.Content;

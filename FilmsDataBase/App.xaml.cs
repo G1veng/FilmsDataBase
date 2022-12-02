@@ -21,6 +21,8 @@ namespace FilmsDataBase
       displayRootRegistry.RegisterWindowType<AddFilmViewModel, AddFilmWindow>();
       displayRootRegistry.RegisterWindowType<InformationAboutFilmWindowViewModel, InformationAboutFilmWindow>();
       displayRootRegistry.RegisterWindowType<GreetingsWindowViewModel, GreetingsWindow>();
+      displayRootRegistry.RegisterWindowType<AuthentificationViewModel, AuthentificationWindow>();
+      displayRootRegistry.RegisterWindowType<CapthcaViewModel, CaptchaWindow>();
     }
     private static void RegisterTypes()
     {

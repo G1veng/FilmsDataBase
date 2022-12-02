@@ -1,4 +1,157 @@
-﻿div{
+﻿.link {
+    display: none;
+    margin: 15px;
+    /*animation-name: slide;
+    animation-duration: 2s;*/
+}
+.slide-animation {
+    animation-name: slide;
+    animation-duration: 2s;
+}
+
+.films {
+    justify-content: center;
+    margin-bottom: 75px;
+}
+.linkOnFilm{
+    cursor: pointer;
+}
+.title {
+    margin: 80px;
+    font-size: 20px;
+    font-family: cursive;
+}
+.imageOfFilm {
+    height: 100%;
+    width: 100%;
+}
+.pageName {
+    display: flex;
+    justify-content: center;
+    font-family: monospace;
+    font-size: large;
+    height: 60px;
+}
+.rowOfFilms {
+    display: flex;
+    justify-content: center;
+}
+.addFilm {
+    display: table-cell;
+    margin: 2%;
+    background-color: orange;
+    border-radius: 8px;
+    font-size: 40px;
+    border-width: thin;
+    font-family: auto;
+    font-weight: 200;
+    align-self: center;
+    cursor: pointer;
+    font-weight: initial;
+    height: 40px;
+    width: 40px;
+    text-align: center;
+    vertical-align: middle;
+}
+.particularFilm {
     display: grid;
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
+}
+.trailer{
+    height : 200px;
+}
+.icon{
+    height : 300px; 
+}
+.wrapper {
+    display: grid;
+    grid-template-columns: 40% 1fr;
+}
+.titleInput {
+    width: 200px;
+    height: 20px;
+    justify-self: center;
+    background: orange;
+    border-radius: 3px;
+    margin: 6px;
+    border: 2px solid black;
+}
+.iconInput{
+    display : none;
+}
+.trailerInput{
+    display : none;
+}
+.yearInput {
+    width: 100px;
+    justify-self: center;
+    height: 20px;
+    margin: 5px;
+}
+.descriptionInput {
+    width: 100px;
+    justify-self: center;
+    height: 20px;
+    margin: 5px;
+}
+.submitInput {
+    width: 85px;
+    justify-self: center;
+    height: 20px;
+    margin: 5px;
+}
+.filmForm {
+    text-align-last: center;
+    /* grid-template-columns: 40% 1fr; */
+    display: grid;
+}
+.inputButton {
+    cursor: pointer;
+    width: 100px;
+    justify-self: center;
+    border: 2px solid black;
+    background: lightblue;
+    border-radius: 5px;
+    height: 25px;
+    font-family: system-ui;
+    margin: 5px
+}
+.filmPreview {
+    display: grid;
+    grid-template-columns: 50% 1fr;
+}
+.titlePreview {
+    align-self: self-end;
+    text-align: center;
+    margin: 10px;
+}
+.trailerPreview{
+    margin : 10px;
+}
+.iconPreview{
+    text-align : center;
+}
+.yearPreview {
+    text-align: center;
+    align-self: self-start;
+}
+.titleIconYear{
+
+}
+.trailerDescription{
+
+}
+.descriptionPreview {
+    text-align: center;
+}
+.trailerDescription {
+    align-self: center;
+}
+@keyframes slide{
+    from{
+        margin-bottom: 100%;
+    }
+    to {
+        margin-bottom: 100%;
+    }
 }

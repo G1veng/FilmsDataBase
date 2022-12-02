@@ -67,6 +67,17 @@ namespace FilmsDataBase
       openWindows[vm] = window;
     }
 
+    public void ShowDialogPresentation(object vm)
+    {
+      if (vm == null)
+        throw new ArgumentNullException("vm");
+      if (openWindows.ContainsKey(vm))
+        throw new InvalidOperationException("UI for this VM is already displayed");
+      var window = CreateWindowInstanceWithVM(vm);
+      openWindows[vm] = window;
+      window.ShowDialog();
+    }
+
     public void HidePresentation(object vm)
     {
       Window window;
